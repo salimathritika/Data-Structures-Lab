@@ -1,0 +1,71 @@
+//Lab 2 question 2
+
+#include<stdio.h>
+struct student
+{
+    char name[100];
+    int roll;
+    int grade;
+};
+int n;
+
+void read(struct student s[]);
+void display(struct student s[]);
+void sort(struct student s[]);
+
+int main()
+{
+    printf("Enter the number of students:");
+    scanf("%d",&n);
+    struct student s[n];
+    read(s);
+    sort(s);
+    display(s);
+}
+
+void read(struct student s[])
+{
+    int i;
+    for(i=0;i<n;i++)
+    {
+        printf("Enter the name of the student");
+        scanf("%s",&s[i].name);
+        printf("Enter the roll number of the student");
+        scanf("%d",&s[i].roll);
+        printf("Enter the grade of the student");
+        scanf("%d",&s[i].grade);
+    }
+}
+
+void display(struct student s[])
+{
+    int i;
+    for(i=0;i<n;i++)
+    {
+        printf("%d)",(i+1));
+        printf("The name of the student:%s\n",s[i].name);
+        printf("The roll number of the student:%d\n",s[i].roll);
+        printf("The grade of the student:%d\n",s[i].grade);
+    }
+}
+
+
+void sort(struct student s[])
+{
+    int i,j;
+    struct student temp;
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n-1;j++)
+        {
+            if(s[j].roll>s[j+1].roll)
+            {
+               temp=s[j];
+               s[j]=s[j+1];
+               s[j+1]=temp;
+            }
+        }
+    }
+}
+
+
