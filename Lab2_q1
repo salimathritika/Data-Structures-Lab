@@ -1,0 +1,125 @@
+//Lab 2 question 1
+
+#include <stdio.h>
+
+int length(char str[]);
+void concat(char str1[],char str2[]);
+int comp(char str1[],char str2[]);
+void insert(char str1[],char str2[],int p);
+//void del(char str1[],int p);
+
+int main()
+{
+    int i,len,opt,pos,flag=0;
+    char s1[100],s2[100];
+    printf("1. To find length of string\n2. To concatenate two strings\n3. To compare two strings\n4. To insert a substring\n5. To delete a substring\n");
+    scanf("%d",&opt);
+    switch(opt)
+    {
+    case 1:
+        {
+            printf("Enter the string: ");
+            scanf("%s",s1);
+            printf("The length of %s is %d",s1,length(s1));
+            break;
+        }
+    case 2:
+        {
+           printf("Enter the strings:\n ");
+            scanf("%s",s1);
+            scanf("%s",s2);
+            concat(s1,s2);
+            printf("The concatenated string is:%s",s1);
+            break;
+        }
+    case 3:
+        {
+            printf("Enter the strings:\n ");
+             scanf("%s",s1);
+            scanf("%s",s2);
+            flag=comp(s1,s2);
+            if(flag==1)
+                printf("%s and %s are equal",s1,s2);
+            else
+                printf("%s and %s are not equal",s1,s2);
+            break;
+        }
+    case 4:
+        {
+            printf("Enter the strings:\n ");
+             scanf("%s",s1);
+             printf("Enter the substring:\n ");
+             scanf("%s",s2);
+             printf("Enter the position:\n ");
+             scanf("%d",&pos);
+             insert(s1,s2,pos);
+             printf("The new string is:%s",s1);
+             break;
+        }
+   /* case 5:
+        {
+            printf("Enter the string:\n ");
+             scanf("%s",s1);
+             printf("Enter the position from where it should be deleted:\n ");
+             scanf("%d",pos);
+             del(s1,pos);
+             printf("The new string is:%s",s1);
+             break;
+        }*/
+    default:
+        printf("Wrong choice");
+
+    }
+}
+
+
+int length(char str[])
+{
+    int i;
+    for(i=0;str[i]!='\0';i++);
+    return i;
+}
+
+void concat(char str1[],char str2[])
+{
+    int i,j;
+    i=length(str1);
+    for(j=0;str2[j]!='\0';j++,i++)
+    {
+        str1[i]=str2[j];
+    }
+    str1[i]='\0';
+}
+
+int comp(char str1[],char str2[])
+{
+    int i;
+    while((str1[i]!='\0') || (str2[i]!='\0'))
+    {
+        if(str1[i]!=str2[i])
+            break;
+        i++;
+    }
+    if(str1[i]==str2[i])
+        return 1;
+    return 0;
+}
+
+void insert(char str1[],char str2[],int p)
+{
+    char temp;
+    int len,i,j,n;
+    len=length(str1);
+    n=length(str2);
+    for(i=len+n;i>=p;i--)
+    {
+        temp=str1[i];
+        str1[i]=str1[i-1];
+        str1[i-1]=temp;
+    }
+    for(i=p,j=0;i<p+n;i++,j++)
+        str1[p]=str2[j];
+    str1[p]='\0';
+}
+
+void del(char str1[],int p)
