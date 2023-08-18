@@ -1,0 +1,51 @@
+#include<stdio.h>
+#include<string.h>
+
+char s[10],rev[10],a[20];
+int top=-1,len=0;
+
+void push(char ele);
+char pop();
+
+int main()
+{
+    char str[100],rev[100];
+    printf("Enter a string:\n");
+    gets(str);
+    fflush(stdin);
+    int i,j;
+    for(len=0;str[len]!='\0';len++);
+
+    for(i=0;i<len;i++)
+        push(str[i]);
+    for(j=0;j<len;j++)
+        rev[j]=pop();
+    rev[j]='\0';
+    if(strcmp(str,rev)==0)
+        printf("Palindrome");
+    else
+        printf("Not palindrome");
+
+}
+
+void push(char ele)
+{
+    if(top==len-1)
+        printf("Stack is full\n");
+    else
+    {
+        a[++top]=ele;
+    }
+
+}
+
+char pop()
+{
+    if(top==-1)
+    {
+        printf("Stack is empty\n");
+        return('\0');
+    }
+    else
+        return(a[top--]);
+}
