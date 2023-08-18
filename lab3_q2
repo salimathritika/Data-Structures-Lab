@@ -1,0 +1,86 @@
+#include<stdio.h>
+
+int size=0,top=-1;
+int a[100];
+
+void push(int ele);
+int pop();
+
+int main()
+{
+    int i,j=0,rem=0,p[30],q[30],num,base;
+    printf("Enter a number: ");
+    scanf("%d",&num);
+    printf("Enter the base: ");
+    scanf("%d",&base);
+
+    i=num;
+    while(i>0)
+    {
+        i=i/base;
+        size++;
+    }
+    i=num;
+    while(i>0)
+    {
+        rem=i%base;
+        push(rem);
+        i=i/base;
+    }
+
+   /* for(i=0;i<size;i++)
+        push(p[i]);*/
+
+    /*for(i=0;i<size;i++)
+        printf("%d ",a[i]);*/
+
+   /* for(j=size-1,i=0;j>=0;j++,i++)
+       {
+           q[i]=pop();
+       }*/
+
+
+    printf("The result of conversion is:\n");
+    for(i=0;i<size;i++)
+    {
+        q[i]=pop();
+        if(q[i]==10)
+            printf("A");
+         else if(q[i]==11)
+            printf("B");
+        else if(q[i]==12)
+            printf("C");
+        else if(q[i]==13)
+            printf("D");
+        else if(q[i]==14)
+            printf("E");
+        else if(q[i]==15)
+            printf("F");
+        else if(q[i]!=999)
+            printf("%d",q[i]);
+
+
+    }
+}
+
+void push(int ele)
+{
+    if(top==size-1)
+        printf("Stack is full\n");
+    else
+    {
+        a[++top]=ele;
+    }
+
+}
+
+int pop()
+{
+    if(top==-1)
+    {
+        printf("Stack is empty\n");
+        return(999);
+    }
+    else
+        return(a[top--]);
+}
