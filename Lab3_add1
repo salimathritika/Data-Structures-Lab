@@ -19,7 +19,7 @@ void Push(int stackInd, int n)
     top[stackInd]++;
     if(top[stackInd] >= SIZE * (stackInd+1))
     {
-        printf("Stack out of bound");
+        printf("Stack is full");
         return;
     }
 
