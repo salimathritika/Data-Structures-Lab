@@ -1,0 +1,101 @@
+#include<stdio.h>
+
+#define m 3
+//#define n 4
+
+int n=4;
+
+typedef struct
+{
+    int row;
+    int col;
+    int val;
+}sparse;
+
+sparse s[10],tr[10];
+void transpose(sparse a[],sparse b[]);
+
+int main()
+{
+    int i,j,k=0,ele;
+    printf("Enter the elements:\n");
+    for(i=0;i<m;i++)
+    {
+        for(j=0;j<n;j++)
+        {
+            scanf("%d",&ele);
+            if(ele!=0)
+            {
+                k++;
+                s[k].row=i;
+                s[k].col=j;
+                s[k].val=ele;
+            }
+        }
+    }
+    s[0].row=m;
+    s[0].col=n;
+    s[0].val=k;
+    transpose(s,tr);
+
+    k=1;
+    printf("The matrix is:\n");
+    for(i=0;i<m;i++)
+    {
+        for(j=0;j<n;j++)
+        {
+            if(s[k].row==i && s[k].col==j)
+            {
+                printf("%d\t",s[k].val);
+                k++;
+            }
+            else
+                printf("0\t");
+        }
+        printf("\n");
+    }
+
+    k=1;
+    printf("The transpose of the matrix is:\n");
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<m;j++)
+        {
+            if(tr[k].row==i && tr[k].col==j)
+            {
+                printf("%d\t",tr[k].val);
+                k++;
+            }
+            else
+                printf("0\t");
+        }
+        printf("\n");
+    }
+}
+
+void transpose(sparse a[],sparse b[])
+{
+    int n,i,j,currentb;
+    n=a[0].val;
+    b[0].row=a[0].col;
+    b[0].col=a[0].row;
+    b[0].val=n;
+    if(n>0)
+    {
+        currentb=1;
+        for(i=0;i<a[0].col;i++)
+        {
+            for(j=1;j<=n;j++)
+            {
+                if(a[j].col==i)
+                {
+                    b[currentb].row=a[j].col;
+                    b[currentb].col=a[j].row;
+                    b[currentb].val=a[j].val;
+                    currentb++;
+                }
+            }
+        }
+    }
+}
+
