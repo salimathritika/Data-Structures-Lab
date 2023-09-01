@@ -123,9 +123,9 @@ void infix2postfix(char infix[],char postfix[])
                     postfix[j++]=pop();
             pop(); //to pop out left parenthesis
         }
-        else if(top==-1)
+        else if(get_token(infix[i])=='#')
         {
-            postfix[j++]=pop();
+          // postfix[j++]=pop();
             break;
         }
 
@@ -138,6 +138,7 @@ void infix2postfix(char infix[],char postfix[])
         }
         i++;
     }
+    postfix[j++]=pop();
 }
 
 int main()
