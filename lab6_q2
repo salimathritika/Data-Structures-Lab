@@ -1,0 +1,102 @@
+//WORKS
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_SIZE 100
+
+char s[MAX_SIZE];
+int top=-1;
+void push(char a)
+{
+    if(top==MAX_SIZE-1)
+        printf("\nStack is full\n");
+    else
+        s[++top]=a;
+}
+
+char pop()
+{
+    if(top==-1)
+    {
+        printf("\nStack is empty\n");
+        return('#');
+    }
+    else
+        return(s[top--]);
+}
+
+typedef enum{lparen,rparen,plus,minus,times,divide,mod,eos,operand}precedence;
+
+precedence get_token(char c)
+{
+    switch(c)
+    {
+    case '(':return lparen;
+    case ')':return rparen;
+    case '+':return plus;
+    case '-':return minus;
+    case '*':return times;
+    case '/':return divide;
+    case '%':return mod;
+    case '#':return eos;
+    default:return operand;
+    }
+}
+
+void prefix_eval(char prefix[])
+{
+    int n=strlen(prefix);
+    precedence temp;
+    int i=n-1,op1,op2;
+    while(i>=0)
+    {
+        temp=get_token(prefix[i]);
+        if(temp==operand)
+            push(prefix[i]-'0');//to convert the number from string to int form
+        else
+        {
+            op1=pop();
+            op2=pop();
+            switch(prefix[i])
+            {
+            case '+':
+                {
+                    push (op1+op2);
+                    break;
+                }
+                case '-':
+                {
+                    push (op1-op2);
+                    break;
+                }
+                case '*':
+                {
+                    push (op1*op2);
+                    break;
+                }
+                case '/':
+                {
+                    push (op1/op2);
+                    break;
+                }
+                case '%':
+                {
+                    push (op1%op2);
+                    break;
+                }
+            }
+        }
+        i--;
+    }
+    printf("Result: %d",pop());
+}
+int main()
+{
+    char prefix[100];
+    printf("\nEnter the prefix expression:");
+    gets(prefix);
+    prefix_eval(prefix);
+}
+
+
