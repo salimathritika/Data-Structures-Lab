@@ -65,7 +65,6 @@ void infix2postfix(char infix[],char postfix[])
         }
         else if(get_token(infix[i])=='#')
         {
-          // postfix[j++]=pop();
             break;
         }
 
