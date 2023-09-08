@@ -1,4 +1,4 @@
-
+//WORKS BUT NEED TO OPTIMIZE AND TRY TO DO DIRECTLY FROM PREFIX TO INFIX
 #include <stdio.h>
 #include <string.h>
 #define MAX_SIZE 100
