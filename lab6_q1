@@ -1,5 +1,3 @@
-//giving weird answers
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,7 +5,7 @@
 #define MAX_SIZE 100
 
 char s[MAX_SIZE];
-int top=-1,flag=0;
+int top=-1;
 int n;
 void push(char a)
 {
@@ -49,7 +47,7 @@ precedence get_token(char c)
     }
 }
 
-void infix2postfix(char infix[],char postfix[])
+void infix2prefix(char infix[],char prefix[])
 {
     n=strlen(infix);
     int i=n-1,j=0;
@@ -59,17 +57,15 @@ void infix2postfix(char infix[],char postfix[])
     while(i>=0)
     {
         temp=get_token(infix[i]);
-        if(temp==rparen || temp==lparen)
-            flag=1;
         if(temp==operand)
-          postfix[j++]=infix[i];
+          prefix[j++]=infix[i];
         else if(temp==lparen)
         {
             while(s[top]!=')')
-                    postfix[j++]=pop();
+                    prefix[j++]=pop();
             pop(); //to pop out left parenthesis
         }
-       else if(get_token(infix[i])=='#')
+       else if(get_token(infix[i])==eos)
         {
           // postfix[j++]=pop();
             break;
@@ -78,31 +74,25 @@ void infix2postfix(char infix[],char postfix[])
         else
         {
             while(icp[temp]<isp[get_token(s[top])])
-                postfix[j++]=pop();
+                prefix[j++]=pop();
             push(infix[i]);
 
         }
         i--;
     }
     while(s[top]!='#')
-    postfix[j++]=pop();
+    prefix[j++]=pop();
 }
 
 int main()
 {
-    char infix[100],postfix[100];
+    char infix[100],prefix[100];
     printf("\nEnter the infix expression:");
     scanf("%s",infix);
-    infix2postfix(infix,postfix);
+    infix2prefix(infix,prefix);
     printf("\nThe equivalent prefix expression is:\n");
-    if(flag==1)
-    {
-        for(int i=0;i<n;i++)
-           printf("%c",postfix[i]);
-    }
-    else
-       {
-        for(int i=n-1;i>=0;i--)
-           printf("%c",postfix[i]);
-       }
+    for(int i=n-1;i>=0;i--)
+    printf("%c",prefix[i]);
 }
+
+
