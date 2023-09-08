@@ -1,4 +1,4 @@
-//NOT COMPLETE
+//WORKS
 
 #include <stdio.h>
 #include <string.h>
@@ -43,34 +43,31 @@ precedence get_token(char c)
 
 void(postfix2infix(char postfix[]))
 {
-    char temp1[10],temp2[10],op1[10],op2[10];
+    char temp1[3],temp2[20],op1[20],op2[20];
     int i=0;
     precedence temp;
 
     while(postfix[i]!='\0')
     {
         temp=get_token(postfix[i]);
-        //temp1[0]=postfix[i];
-        strcpy(temp1[0],postfix[i]);
-        //temp1[1]='\0';
-        strcpy(temp1[1],'\0');
+        temp1[0]=postfix[i];
+        temp1[1]='\0';
         if(temp==operand)
             push (temp1);
         else
         {
             strcpy(op2,pop());
-            //op1=pop();
             strcpy(op1,pop());
-            strcpy(temp2,'(');
+            strcpy(temp2,"(");
             strcat(temp2,op1);
+            strcat(temp2,temp1);
             strcat(temp2,op2);
-            strcpy(temp2,')');
-
+            strcat(temp2,")");
             push(temp2);
         }
         i++;
     }
-    printf("Final expression is:%s",temp2);
+    printf("Infix expression is:%s",pop());
 }
 
 int main()
