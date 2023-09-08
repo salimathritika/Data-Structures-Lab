@@ -98,5 +98,3 @@ int main()
     gets(prefix);
     prefix_eval(prefix);
 }
-
-
