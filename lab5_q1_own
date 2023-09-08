@@ -77,6 +77,7 @@ void infix2postfix(char infix[],char postfix[])
         }
         i++;
     }
+    while(s[top]!='#')
     postfix[j++]=pop();
 }
 
