@@ -1,0 +1,143 @@
+
+#include <stdio.h>
+#include <string.h>
+#define MAX_SIZE 100
+
+char s[20][20];
+int top=-1;
+
+void push(char a[])
+{
+    if(top==MAX_SIZE-1)
+        printf("\nStack is full");
+    else
+        strcpy(s[++top],a);
+}
+
+char *pop()
+{
+    if(top==-1)
+        printf("\nEmpty");
+    else
+        return (s[top--]);
+}
+
+typedef enum{lparen,rparen,plus,minus,times,divide,mod,eos,operand}precedence;
+
+precedence get_token(char c)
+{
+    switch(c)
+    {
+    case '(':return lparen;
+    case ')':return rparen;
+    case '+':return plus;
+    case '-':return minus;
+    case '*':return times;
+    case '/':return divide;
+    case '%':return mod;
+    case '#':return eos;
+    default:return operand;
+    }
+}
+
+void prefix2infix(char prefix[],char temp2[])
+{
+    char temp1[3],op1[20],op2[20];
+    //char temp2[20];
+    int n=strlen(prefix);
+    int i=n-1;
+    precedence temp;
+
+    while(i>=0)
+    {
+        temp=get_token(prefix[i]);
+        temp1[0]=prefix[i];
+        temp1[1]='\0';
+        if(temp==operand)
+            push (temp1);
+        else
+        {
+            strcpy(op1,pop());
+            strcpy(op2,pop());
+            strcpy(temp2,"(");
+            strcat(temp2,op1);
+            strcat(temp2,temp1);
+            strcat(temp2,op2);
+            strcat(temp2,")");
+            push(temp2);
+        }
+        i--;
+    }
+    printf("Infix expression is:%s",pop());
+}
+#define MAX_SIZE 100
+
+char spost[MAX_SIZE];
+int toppost=-1;
+void pushpost(char a)
+{
+    if(toppost==MAX_SIZE-1)
+        printf("\nStack is full\n");
+    else
+        spost[++toppost]=a;
+}
+
+char poppost()
+{
+    if(toppost==-1)
+    {
+        printf("\nStack is empty\n");
+        return('#');
+    }
+    else
+        return(spost[toppost--]);
+}
+
+
+int icp[]={20,19,12,12,13,13,13,0};
+int isp[]={0,19,12,12,13,13,13,0};
+void infix2postfix(char infix[],char postfix[])
+{
+    int i=0,j=0;
+    precedence temp;
+    pushpost('#');
+
+    while(infix[i]!='\0')
+    {
+        temp=get_token(infix[i]);
+        if(temp==operand)
+          postfix[j++]=infix[i];
+        else if(temp==rparen)
+        {
+            while(spost[toppost]!='(')
+                    postfix[j++]=poppost();
+            poppost(); //to pop out left parenthesis
+        }
+        else if(get_token(infix[i])=='#')
+        {
+            break;
+        }
+
+        else
+        {
+            while(icp[temp]<=isp[get_token(spost[toppost])])
+                postfix[j++]=poppost();
+            pushpost(infix[i]);
+
+        }
+        i++;
+    }
+    while(spost[toppost]!='#')
+    postfix[j++]=poppost();
+}
+
+
+int main()
+{
+    char prefix[100],infix[100],postfix[100];
+    printf("\nEnter the prefix expression:");
+    gets(prefix);
+    prefix2infix(prefix,infix);
+    infix2postfix(infix,postfix);
+    printf("\nThe postfix expression is:%s",postfix);
+}
