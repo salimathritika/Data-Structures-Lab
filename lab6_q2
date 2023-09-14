@@ -5,9 +5,9 @@
 
 #define MAX_SIZE 100
 
-char s[MAX_SIZE];
+int s[MAX_SIZE];
 int top=-1;
-void push(char a)
+void push(int a)
 {
     if(top==MAX_SIZE-1)
         printf("\nStack is full\n");
@@ -15,7 +15,7 @@ void push(char a)
         s[++top]=a;
 }
 
-char pop()
+int pop()
 {
     if(top==-1)
     {
