@@ -141,3 +141,91 @@ int main()
     infix2postfix(infix,postfix);
     printf("\nThe postfix expression is:%s",postfix);
 }
+---------------------------------------------------------------------------------------------------
+#include<stdio.h>
+#include<string.h>
+#define MAX_SIZE 100
+
+char s[MAX_SIZE][MAX_SIZE];
+int top = -1;
+
+void push(char c[])
+{
+    if(top >= MAX_SIZE )
+    {
+        printf("Stack out of bound");
+        return;
+    }
+
+    strcpy(s[++top],c);
+
+}
+
+char* pop()
+{
+    if(top < 0)
+    {
+        printf("Stack empty");
+        return "9999999999";
+    }
+    return (s[top--]);
+}
+
+typedef enum{lparen,rparen,plus,minus,times,divide,mod,eos,operand}precedence;
+
+precedence get_token(char c)
+{
+    switch(c)
+    {
+    case '(':return lparen;
+    case ')':return rparen;
+    case '+':return plus;
+    case '-':return minus;
+    case '*':return times;
+    case '/':return divide;
+    case '%':return mod;
+    case '#':return eos;
+    default:return operand;
+    }
+}
+
+int main()
+{
+    char prefix[MAX_SIZE];
+    printf("Enter prefix:\n");
+    scanf("%s",prefix);
+    int n=strlen(prefix);
+    int i=n-1;
+
+    while(i>=0)
+    {
+        char temp[3],op1[20],op2[20];
+        temp[0] = prefix[i];
+        temp[1] = '\0';
+        if(get_token(prefix[i]) == operand)
+        {
+           char temp[3];
+           temp[0] = prefix[i];
+           temp[1] = '\0';
+           push(temp);
+        }
+        else
+        {
+            char temp[MAX_SIZE];
+            strcpy(op1,pop());
+            strcpy(op2,pop());
+            strcpy(temp,op1);
+            strcat(temp,op2);
+            char temp1[3];
+            temp1[0] = prefix[i];
+            temp1[1] = '\0';
+            strcat(temp,temp1);
+            push(temp);
+        }
+        i--;
+    }
+
+    printf("Equivalent postfix expression is= %s", s);
+
+    return 0;
+}
