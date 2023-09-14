@@ -1,0 +1,79 @@
+//OWN WORKS
+#include<stdio.h>
+#include<string.h>
+
+#define max 100
+
+char s[max][max];
+int top=-1;
+
+void push(char a[])
+{
+    if(top==max-1)
+        printf("\nStack is full\n");
+    else
+        strcpy(s[++top],a);
+}
+
+char *pop()
+{
+    if(top==-1)
+    {
+        printf("\nStack is empty\n");
+        return("999999");
+    }
+    else
+        return (s[top--]);
+}
+
+typedef enum {lparen,rparen,plus,minus,times,divide,mod,eos,operand}precedence;
+
+precedence get_token(char c)
+{
+    switch(c)
+    {
+        case '(':return lparen;
+        case ')':return rparen;
+        case '+':return plus;
+        case '-':return minus;
+        case '*':return times;
+        case '/':return divide;
+        case '%':return mod;
+        //case '(':return lparen;
+        default:return operand;
+    }
+}
+
+void postfix2prefix(char postfix[])
+{
+    int i=0;
+    char temp1[3],temp2[max],op1[max],op2[max];
+    precedence temp;
+    while(postfix[i]!='\0')
+    {
+        temp=get_token(postfix[i]);
+        temp1[0]=postfix[i];
+        temp1[1]='\0';
+        if(temp==operand)
+            push(temp1);
+        else
+        {
+            strcpy(op2,pop());
+            strcpy(op1,pop());
+            strcpy(temp2,temp1);
+            strcat(temp2,op1);
+            strcat(temp2,op2);
+            push(temp2);
+        }
+        i++;
+    }
+    printf("\nThe prefix expression is:%s",pop());
+}
+
+int main()
+{
+    char postfix[100];
+    printf("Enter the postfix expression:");
+    scanf("%s",postfix);
+    postfix2prefix(postfix);
+}
