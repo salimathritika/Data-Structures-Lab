@@ -1,0 +1,191 @@
+/*insert at beginning,insert at end,insert at given point,delete from beginning,delete from end*/
+//NOT WORKING
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct
+{
+    int data;
+    struct node *next;
+}node;
+
+node *first=NULL;
+
+void insert(int n)  //WORKS
+{
+    node *temp=(node*)malloc(sizeof(node));
+    node *curr;
+    temp->next=NULL;
+    temp->data=n;
+    if(first==NULL)
+        first=temp;
+    else
+    {
+        for(curr=first;curr->next!=NULL;curr=curr->next);
+        curr->next=temp;
+    }
+}
+
+void display() //WORKS
+{
+    node *curr;
+    if(first==NULL)
+        printf("\nList is empty\n");
+    else
+    {
+        for(curr=first;curr!=NULL;curr=curr->next)
+            printf("%d ",curr->data);
+    }
+}
+
+
+void insert_beg(int n)  //WORKING
+{
+    node *temp,*curr;
+    temp=(node*)malloc(sizeof(node));
+    temp->data=n;
+    temp->next=first;
+    first=temp;
+}
+
+void insert_specifickey(int n,int key)
+{
+    node *temp,*prev,*curr;
+    temp=(node*)malloc(sizeof(node));
+    temp->data=n;
+    if(first==NULL)
+    {
+        first=temp;
+        temp->next=NULL;
+    }
+    else
+    {
+        for(curr=first,prev=first;(curr->data!=key && curr->next!=NULL);prev=curr,curr=curr->next)
+        {
+            if(curr->data==key)
+            {
+                prev->next=temp;
+                temp->next=curr;
+            }
+        }
+    }
+}
+
+//to insert at a specific position
+void insert_pos(int n,int pos)   //NOT WORKING FOR POSITION 1
+{
+    int i=0;
+    node *curr,*temp,*prev;
+    temp=(node*)malloc(sizeof(node));
+    for(curr=first,prev=first;curr->next!=NULL;prev=curr,curr=curr->next)
+    {
+        i++;
+        if(i==pos)
+        {
+            temp->data=n;
+            prev->next=temp;
+            temp->next=curr;
+            curr=temp;
+        }
+    }
+
+}
+
+int delete_beg()
+{
+    node *temp;
+    temp=first;
+    int a=temp->data;
+    first=NULL;
+    free(temp);
+    return(a);
+}
+
+//void delete_last
+
+
+int main()
+{
+    int opt,n,pos,i,num;
+    printf("Enter number of nodes in list:");
+    scanf("%d",&num);
+    printf("Enter %d data:\n",num);
+    for(i=0;i<num;i++)
+    {
+        scanf("%d",&n);
+        insert(n);
+    }
+    display();
+  /*  printf("\nEnter the data to be inserted:");
+    scanf("%d",&n);
+    printf("\nEnter position:");
+    scanf("%d",&pos);
+    insert_pos(n,pos);
+    display();
+    printf("\nEnter the data to be inserted:");
+    scanf("%d",&n);
+    printf("\nEnter position:");
+    scanf("%d",&pos);
+    insert_pos(n,pos);
+
+    display();
+    */
+   printf("1.To insert in beginning\n2.To insert at end\n3.To insert after a specific key\n4.To delete in beginning\n5.To delete in end\n6.To enter data at specific position\n7.To display list\n.9.To exit");
+
+    do
+    {
+        printf("\nEnter choice:\n");
+    scanf("%d",&opt);
+    switch(opt)
+    {
+    case 1:
+        {
+            printf("\nEnter data to be inserted:");
+            scanf("%d",&n);
+            insert_beg(n);
+            break;
+        }
+    case 2:
+        {
+            printf("\nEnter the data to be inserted:");
+            scanf("%d",&n);
+            insert(n);
+            break;
+        }
+    case 3:
+        {
+            printf("\nEnter the data to be inserted:");
+            scanf("%d",&n);
+            printf("\nEnter the data after which given data needs to be inserted:");
+            scanf("%d",&pos);
+            break;
+        }
+    case 4:
+        {
+            printf("The data deleted is :%d",delete_beg());
+            break;
+        }
+   /* case 5:
+        {
+            printf("The data deleted is :%d",delete_end());
+            break;
+        }*/
+
+    case 6:
+        {
+            printf("\nEnter the data to be inserted:");
+            scanf("%d",&n);
+            printf("\nEnter position:");
+            scanf("%d",&pos);
+            break;
+        }
+    case 7:
+        {
+            display();
+            break;
+        }
+    default:printf("Invalid operation");
+    }
+
+    }while(opt!=9);
+}
