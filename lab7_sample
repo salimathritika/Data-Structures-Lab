@@ -154,6 +154,19 @@ int delete_end() //WORKING
     return a;
 }
 
+void reverse()  //WORKING
+{
+    node *temp,*curr=first->next;
+    first->next=NULL;
+    while(curr!=NULL)
+    {
+        temp=curr;
+        curr=curr->next;
+        temp->next=first;
+        first=temp;
+    }
+}
+
 
 int main()
 {
@@ -181,7 +194,7 @@ int main()
 
     display();
     */
-   printf("1.To insert in beginning\n2.To insert at end\n3.To insert before a specific key\n4.To insert after a specific key\n5.To delete in beginning\n6.To delete in end\n7.To enter data at specific position\n8.To display list\n.9.To exit");
+   printf("1.To insert in beginning\n2.To insert at end\n3.To insert before a specific key\n4.To insert after a specific key\n5.To delete in beginning\n6.To delete in end\n7.To enter data at specific position\n8.To reverse list\n9.To display list\n.10.To exit");
 
     do
     {
@@ -243,11 +256,16 @@ int main()
         }
     case 8:
         {
+            reverse();
+            break;
+        }
+    case 9:
+        {
             display();
             break;
         }
     default:printf("Invalid operation");
     }
 
-    }while(opt!=9);
+    }while(opt!=10);
 }
