@@ -11,6 +11,7 @@ typedef struct
 
 node *first=NULL;
 
+//Insert data
 void insert(int n)  //WORKS
 {
     node *temp=(node*)malloc(sizeof(node));
@@ -26,6 +27,7 @@ void insert(int n)  //WORKS
     }
 }
 
+//display contents of list
 void display() //WORKS
 {
     node *curr;
@@ -38,7 +40,7 @@ void display() //WORKS
     }
 }
 
-
+//insert in beginning
 void insert_beg(int n)  //WORKING
 {
     node *temp,*curr;
@@ -48,7 +50,8 @@ void insert_beg(int n)  //WORKING
     first=temp;
 }
 
-void insert_specifickey(int n,int key)
+//insert before specific key
+void insert_beforekey(int n,int key) //WORKING
 {
     node *temp,*prev,*curr;
     temp=(node*)malloc(sizeof(node));
@@ -60,9 +63,9 @@ void insert_specifickey(int n,int key)
     }
     else
     {
-        for(curr=first,prev=first;(curr->data!=key && curr->next!=NULL);prev=curr,curr=curr->next)
+        for(curr=first,prev=first;curr->next!=NULL;prev=curr,curr=curr->next)
         {
-            if(curr->data==key)
+           if(curr->data==key)
             {
                 prev->next=temp;
                 temp->next=curr;
@@ -71,13 +74,46 @@ void insert_specifickey(int n,int key)
     }
 }
 
-//to insert at a specific position
-void insert_pos(int n,int pos)   //NOT WORKING FOR POSITION 1
+
+//insert after specific key
+void insert_afterkey(int n,int key)
 {
+    node *curr,*after,*temp;
+    temp=(node*)malloc(sizeof(node));
+    temp->data=n;
+    if(first==NULL)
+        insert(n);
+    else
+    {
+        for(curr=first;( (curr->data!=key) ||(curr!=NULL));curr=curr->next)   //(curr->data!=key) ||
+        {
+
+            if(curr->next==NULL)
+                insert(n);
+
+        }
+        if(curr->data==key)
+            {
+                //after=temp;
+                temp->next=curr->next;
+                curr->next=temp;
+            }
+
+    }
+}
+
+//to insert at a specific position
+void insert_pos(int n,int pos)   //WORKING
+{
+
     int i=0;
     node *curr,*temp,*prev;
     temp=(node*)malloc(sizeof(node));
-    for(curr=first,prev=first;curr->next!=NULL;prev=curr,curr=curr->next)
+    if(pos==1)
+        insert_beg(n);
+    else
+    {
+        for(curr=first,prev=first;curr->next!=NULL;prev=curr,curr=curr->next)
     {
         i++;
         if(i==pos)
@@ -89,19 +125,34 @@ void insert_pos(int n,int pos)   //NOT WORKING FOR POSITION 1
         }
     }
 
+    }
+
 }
 
-int delete_beg()
+//delete starting nodes
+int delete_beg()  //WORKING
 {
     node *temp;
     temp=first;
     int a=temp->data;
-    first=NULL;
+    first=first->next;
     free(temp);
     return(a);
 }
 
-//void delete_last
+int delete_end() //WORKING
+{
+    node *prev=first,*curr=first;
+    while(curr->next!=NULL)
+    {
+        prev=curr;
+        curr=curr->next;
+    }
+    prev->next=NULL;
+    int a=curr->data;
+    free(curr);
+    return a;
+}
 
 
 int main()
@@ -130,7 +181,7 @@ int main()
 
     display();
     */
-   printf("1.To insert in beginning\n2.To insert at end\n3.To insert after a specific key\n4.To delete in beginning\n5.To delete in end\n6.To enter data at specific position\n7.To display list\n.9.To exit");
+   printf("1.To insert in beginning\n2.To insert at end\n3.To insert before a specific key\n4.To insert after a specific key\n5.To delete in beginning\n6.To delete in end\n7.To enter data at specific position\n8.To display list\n.9.To exit");
 
     do
     {
@@ -156,30 +207,41 @@ int main()
         {
             printf("\nEnter the data to be inserted:");
             scanf("%d",&n);
-            printf("\nEnter the data after which given data needs to be inserted:");
+            printf("\nEnter the data before which given data needs to be inserted:");
             scanf("%d",&pos);
+            insert_beforekey(n,pos);
             break;
         }
-    case 4:
+        case 4:
+        {
+            printf("\nEnter the data to be inserted:");
+            scanf("%d",&n);
+            printf("\nEnter the data after which given data needs to be inserted:");
+            scanf("%d",&pos);
+            insert_beforekey(n,pos);
+            break;
+        }
+    case 5:
         {
             printf("The data deleted is :%d",delete_beg());
             break;
         }
-   /* case 5:
+    case 6:
         {
             printf("The data deleted is :%d",delete_end());
             break;
-        }*/
+        }
 
-    case 6:
+    case 7:
         {
             printf("\nEnter the data to be inserted:");
             scanf("%d",&n);
             printf("\nEnter position:");
             scanf("%d",&pos);
+            insert_pos(n,pos);
             break;
         }
-    case 7:
+    case 8:
         {
             display();
             break;
