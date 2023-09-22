@@ -1,0 +1,96 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct node{
+    int info;
+    struct node *next;
+}node;
+
+node *createNode(int info)
+{
+    node *newNode = (node*)malloc(sizeof(node));
+    newNode->info = info;
+    newNode->next = NULL;
+    return newNode;
+}
+
+node* enqueue(node* start,int info)
+{
+    node *newNode = createNode(info);
+
+    if(start == NULL){
+        start = newNode;
+    }
+
+    else{
+    node *cur = start;
+    while(cur->next != NULL){
+        cur = cur->next;
+    }
+    cur->next = newNode;
+    }
+    return start;
+}
+
+node *dequeue(node *start)
+{
+    if(start == NULL){
+        printf("List is Empty.\n");
+        return start;
+    }
+    node *c=start;
+    start = start->next;
+    printf("\nValue deleted is:%d",c->info);
+    free(c);
+    return start;
+}
+
+node *display(node *start)
+{
+    if(start == NULL){
+        printf("List is Empty.\n");
+        return NULL;
+    }
+    printf("Values are : ");
+    node *c = start;
+    while(c != NULL){
+        printf("%d ", c->info);
+        c = c->next;
+    }
+    printf("\n");
+    return start;
+}
+
+void main()
+{
+    node *start = NULL;
+    int info,ch;
+    printf("\nEnter:\n 1.Enqueue.\n 2.Dequeue.\n 3.Display.\n 4.Exit.\n");
+    do{
+        printf("\nEnter your choice : ");
+        scanf("%d",&ch);
+
+        switch(ch)
+        {
+            case 1:printf("Enter the value to insert : ");
+            scanf("%d", &info);
+            start = enqueue(start,info);
+            break;
+
+            case 2:start = dequeue(start);
+            break;
+
+            case 3:start = display(start);
+            break;
+
+            case 4:printf("Exiting the program.\n");
+            break;
+
+            default : printf("Invalid Choice.\n");
+            break;
+        }
+    }while(ch != 4);
+}
+
+
+
