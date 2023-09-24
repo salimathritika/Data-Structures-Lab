@@ -1,96 +1,86 @@
+//stack using SLL (OWN)
 #include<stdio.h>
 #include<stdlib.h>
 
-typedef struct node{
-    int info;
+typedef struct
+{
+    int data;
     struct node *next;
 }node;
 
-node *createNode(int info)
+node *first=NULL;
+
+void enqueue(int n)
 {
-    node *newNode = (node*)malloc(sizeof(node));
-    newNode->info = info;
-    newNode->next = NULL;
-    return newNode;
+    node *temp;
+    temp=(node*)malloc(sizeof(node));
+    temp->data=n;
+    if(first==NULL)
+    {
+        first=temp;
+        first->next=NULL;
+    }
+    else
+    {
+        node *curr;
+        for(curr=first;curr->next!=NULL;curr=curr->next);
+        curr->next=temp;
+        temp->next=NULL;
+    }
 }
 
-node* enqueue(node* start,int info)
+void dequeue()
 {
-    node *newNode = createNode(info);
-
-    if(start == NULL){
-        start = newNode;
+    if(first==NULL)
+      printf("\nQueue is empty\n");
+    else
+    {
+        node *temp;
+        temp=first;
+        printf("Data deleted is:%d\n",temp->data);
+        first=first->next;
+        free(temp);
     }
-
-    else{
-    node *cur = start;
-    while(cur->next != NULL){
-        cur = cur->next;
-    }
-    cur->next = newNode;
-    }
-    return start;
 }
 
-node *dequeue(node *start)
-{
-    if(start == NULL){
-        printf("List is Empty.\n");
-        return start;
-    }
-    node *c=start;
-    start = start->next;
-    printf("\nValue deleted is:%d",c->info);
-    free(c);
-    return start;
-}
 
-node *display(node *start)
+void display()
 {
-    if(start == NULL){
-        printf("List is Empty.\n");
-        return NULL;
-    }
-    printf("Values are : ");
-    node *c = start;
-    while(c != NULL){
-        printf("%d ", c->info);
-        c = c->next;
-    }
+    node *curr;
+    for(curr=first;curr!=NULL;curr=curr->next)
+        printf("%d ",curr->data);
     printf("\n");
-    return start;
 }
 
-void main()
+int main()
 {
-    node *start = NULL;
-    int info,ch;
-    printf("\nEnter:\n 1.Enqueue.\n 2.Dequeue.\n 3.Display.\n 4.Exit.\n");
-    do{
-        printf("\nEnter your choice : ");
-        scanf("%d",&ch);
-
-        switch(ch)
+    int opt,ele;
+    printf("1.Enqueue\n2.Dequeue\n3/Display\n4.Exit\n");
+    do
+    {
+        printf("Enter choice:");
+        scanf("%d",&opt);
+        switch(opt)
         {
-            case 1:printf("Enter the value to insert : ");
-            scanf("%d", &info);
-            start = enqueue(start,info);
-            break;
-
-            case 2:start = dequeue(start);
-            break;
-
-            case 3:start = display(start);
-            break;
-
-            case 4:printf("Exiting the program.\n");
-            break;
-
-            default : printf("Invalid Choice.\n");
-            break;
+        case 1:
+            {
+                printf("Enter data to be inserted:");
+                scanf("%d",&ele);
+                enqueue(ele);
+                break;
+            }
+        case 2:
+            {
+                dequeue();
+                break;
+            }
+        case 3:
+            {
+                display();
+                break;
+            }
+        case 4:
+            printf("Exiting");
         }
-    }while(ch != 4);
+    }while(opt!=4);
 }
-
-
-
