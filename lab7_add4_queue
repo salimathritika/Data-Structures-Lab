@@ -1,4 +1,4 @@
-//stack using SLL (OWN)
+//queue using SLL (OWN)
 #include<stdio.h>
 #include<stdlib.h>
 
