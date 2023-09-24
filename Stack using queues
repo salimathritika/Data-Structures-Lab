@@ -1,0 +1,115 @@
+//problematic
+
+#include<stdio.h>
+
+#define max 20
+
+int f1=-1,r1=-1,f2=-1,r2=-1;
+int q1[max],q2[max];
+
+void insert1(int n)
+{
+    if(r1==max-1)
+        printf("\nQueue1 is full\n");
+    else
+    {
+        q1[++r1]=n;
+
+    }
+
+}
+
+void insert2(int n)
+{
+    if(r2==max-1)
+        printf("\nQueue2 is full\n");
+    else
+        q2[++r2]=n;
+}
+
+int del1()
+{
+    if(f1==r1)
+       {
+
+           return (-999);
+       }
+    else
+      return(q1[++f1]);
+}
+
+int del2()
+{
+    if(f2==r2)
+        {return (-999);}
+    else
+      return(q2[++f2]);
+}
+
+void push(int n)
+{
+        int a=del1();
+        while(a!=(-999))
+        {
+            insert2(a);
+            a=del1();
+        }
+
+        insert1(n);
+        a=del2();
+        while(a!=(-999))
+        {
+            insert1(a);
+            a=del2();
+        }
+
+}
+
+int pop()
+{
+    if(f1==r1)
+        {printf("\nStack is empty\n");return(-999);}
+    else
+        return(del1());
+}
+
+void display()
+{
+    for(int i=0;i<=r1;i++)
+        printf("%d ",q1[i]);
+}
+
+int main()
+{
+    int opt,ele;
+    printf("1.Push\n2.Pop\n3.Display\n4.Exit\n");
+    do
+    {
+        printf("\nEnter option:");
+        scanf("%d",&opt);
+        switch(opt)
+    {
+    case 1:
+        {
+            printf("Enter element:");
+            scanf("%d",&ele);
+            push(ele);
+            break;
+        }
+    case 2:
+        {
+            ele=pop();
+            if(ele!=-999)
+            printf("Popped element:%d\n",ele);
+            break;
+        }
+    case 3:
+        {
+            display();
+            break;
+        }
+    case 4:
+        printf("Exiting");
+    }
+    }while(opt!=4);
+}
