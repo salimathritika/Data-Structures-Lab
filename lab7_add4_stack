@@ -1,129 +1,75 @@
-#include <stdio.h>
-#include <stdlib.h>
+//stack using SLL (OWN)
+#include<stdio.h>
+#include<stdlib.h>
 
-typedef struct {
+typedef struct
+{
     int data;
     struct node *next;
 }node;
 
-node *top=NULL;
-/*
-Checks if Stack is empty or not
-*/
-int isEmpty() {
-    if (top == NULL)
-        return 1;
+node *first=NULL;
+
+void push(int n)
+{
+    node *temp;
+    temp=(node *)malloc(sizeof(node));
+    temp->data=n;
+    temp->next=first;
+    first=temp;
+}
+
+void pop()
+{
+    if(first==NULL)
+        printf("\nStack is empty\n");
     else
-        return 0;
-}
-
-/*
-Returns the top element of Stack
-*/
-int peek() {
-    return top->data;
-}
-
-/* Count stack elements */
-int getStackSize(node *head){
-    if (head == NULL) {
-       printf("Error : Invalid stack pointer !!!\n");
-       return;
-    }
-
-    int length = 0;
-    while(head != NULL){
-        head = head->next;
-        length++;
-    }
-    return length;
-}
-
-/*
-Push an Element in Stack
-*/
-void push(int num) {
-    node *temp;
-    temp =(node *)malloc(sizeof(node));
-    temp->data = num;
-
-    if (top == NULL) {
-        top = temp;
-        top->next = NULL;
-    } else {
-        temp->next = top;
-        top = temp;
-    }
-}
-
-/*
-Pop Operation: Removes Top Element of the Stack
-*/
-void pop() {
-    node *temp;
-    if (isEmpty(top)) {
-        printf("\nStack is Empty\n");
-        return;
-    } else {
-        temp = top;
-        top = top->next;
-        printf("Removed  Element : %d\n", temp->data);
+    {
+        node *temp;
+        temp=first;
+        printf("Data deleted is:%d\n",temp->data);
+        first=first->next;
         free(temp);
     }
 }
 
-/*
- Prints the linked list representation of a stack
-*/
-void printStack(node *nodePtr) {
-  while (nodePtr != NULL) {
-     printf("%d", nodePtr->data);
-     nodePtr = nodePtr->next;
-     if(nodePtr != NULL)
-         printf("-->");
-  }
-  printf("\n");
+void display()
+{
+    node *curr;
+    for(curr=first;curr!=NULL;curr=curr->next)
+        printf("%d ",curr->data);
+    printf("\n");
 }
 
-void main() {
-
-   int opt,ele;
-   printf("1.Push\n2.Pop\n3.Display\n4.Size of stack\n5.Peek\n6.Exit\n");
-   do
-   {
-       printf("Enter choice:");
-       scanf("%d",&opt);
-       switch(opt)
-       {
-           case 1:
-               {
-                   printf("Enter the element:");
-                   scanf("%d",&ele);
-                   push(ele);
-                   break;
-               }
-           case 2:
+int main()
+{
+    int opt,ele;
+    printf("1.Push\n2.Pop\n3/Display\n4.Exit\n");
+    do
+    {
+        printf("Enter choice:");
+        scanf("%d",&opt);
+        switch(opt)
+        {
+        case 1:
+            {
+                printf("Enter data to be pushed:");
+                scanf("%d",&ele);
+                push(ele);
+                break;
+            }
+        case 2:
             {
                 pop();
                 break;
             }
-           case 3:
+        case 3:
             {
-                printStack(top);
+                display();
                 break;
             }
-           case 4:
-            {
-                getStackSize(top);
-                break;
-            }
-           case 5:
-            {
-                printf("Data is:%d\n",peek());
-                break;
-            }
-
-       }
-   }while(opt!=6);
-
+        case 4:
+            printf("Exiting");
+        }
+    }while(opt!=4);
 }
