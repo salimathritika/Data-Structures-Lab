@@ -1,0 +1,96 @@
+#include<stdio.h>
+
+#define max 20
+
+int top1=-1,top2=-1,count=0;
+int s1[max],s2[max];
+
+void push1(int n)
+{
+    if(top1==max-1)
+        printf("\nStack 1 is full\n");
+    else
+        s1[++top1]=n;
+}
+
+int pop1()
+{
+    if(top1==-1)
+        {printf("\nStack 1 is empty\n");return (-9999);}
+    else
+        return(s1[top1--]);
+}
+
+void push2(int n)
+{
+    if(top2==max-1)
+        printf("\nStack 2 is full\n");
+    else
+        s2[++top2]=n;
+}
+
+int pop2()
+{
+    if(top2==-1)
+        {printf("\nStack 2 is empty\n");return (-9999);}
+    else
+        return(s2[top2--]);
+}
+
+void enqueue(int n)
+{
+    push1(n);
+    count++;
+}
+
+int dequeue()
+{
+    int i=0;
+    for(i=0;i<count;i++)
+        push2(pop1());
+    int a=pop2();
+    count--;
+    for(i=0;i<count;i++)
+        push1(pop2());
+    return a;
+}
+
+void display()
+{
+    for(int i=0;i<=top1;i++)
+        printf("%d ",s1[i]);
+}
+
+int main()
+{
+    int opt,ele;
+    printf("1.Enqueue\n2.Dequeue\n3.Display\n4.Exit\n");
+    do
+    {
+        printf("\nEnter option:");
+        scanf("%d",&opt);
+        switch(opt)
+    {
+    case 1:
+        {
+            printf("Enter element:");
+            scanf("%d",&ele);
+            enqueue(ele);
+            break;
+        }
+    case 2:
+        {
+            printf("Dequeued element:%d\n",dequeue());
+            break;
+        }
+    case 3:
+        {
+            display();
+            break;
+        }
+    case 4:
+        printf("Exiting");
+    }
+    }while(opt!=4);
+
+}
