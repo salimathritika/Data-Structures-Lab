@@ -85,7 +85,7 @@ void insert_beforekey(int n,int key) //WORKING
 
 
 //insert after specific key
-void insert_afterkey(int n,int key)
+void insert_afterkey(int n,int key)   //WORKING
 {
     node *curr,*after,*temp;
     temp=(node*)malloc(sizeof(node));
@@ -94,19 +94,19 @@ void insert_afterkey(int n,int key)
         insert(n);
     else
     {
-        for(curr=first;( (curr->data!=key) ||(curr!=NULL));curr=curr->next)   //(curr->data!=key) ||
-        {
+    // Find the node with the key value
+    while (curr != NULL && curr->data != key) {
+        curr = curr->next;
+    }
+    // If the key is not found in the list
+    if (curr == NULL) {
+        printf("Element %d not found in the list.\n", key);
+        return;
+    }
 
-            if(curr->next==NULL)
-                insert(n);
-
-        }
-        if(curr->data==key)
-            {
-                //after=temp;
-                temp->next=curr->next;
-                curr->next=temp;
-            }
+    // Insert the new node after the node with the key
+    temp->next = curr->next;
+    curr->next = temp;
 
     }
 }
