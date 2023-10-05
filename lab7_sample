@@ -163,6 +163,39 @@ int delete_end() //WORKING
     return a;
 }
 
+void deleteElement(int key)   //WORKING
+{
+    node* curr = first;
+    node* prev = NULL;
+
+    // If the first node itself holds the key to be deleted
+    if (curr != NULL && curr->data == key) {
+        first = curr->next;
+        free(curr);
+        return;
+    }
+
+    // Search for the key to be deleted, keeping track of the previous node
+    while (curr != NULL && curr->data != key) {
+        prev = curr;
+        curr = curr->next;
+    }
+
+    // If the key is not found in the list
+    if (curr == NULL) {
+        printf("Element %d not found in the list.\n", key);
+        return;
+    }
+
+    // Unlink the node containing the key from the list
+    prev->next = curr->next;
+    free(curr);
+}
+
+
+
+
+
 void reverse()  //WORKING
 {
     node *temp,*curr=first->next;
@@ -179,7 +212,7 @@ void reverse()  //WORKING
 
 int main()
 {
-    int opt,n,pos,i,num;
+    int opt,n,pos,i,num,ele;
     printf("Enter number of nodes in list:");
     scanf("%d",&num);
     printf("Enter %d data:\n",num);
@@ -203,7 +236,7 @@ int main()
 
     display();
     */
-   printf("1.To insert in beginning\n2.To insert at end\n3.To insert before a specific key\n4.To insert after a specific key\n5.To delete in beginning\n6.To delete in end\n7.To enter data at specific position\n8.To reverse list\n9.To display list\n10.To traverse list\n-1.To exit");
+   printf("\n1.To insert in beginning\n2.To insert at end\n3.To insert before a specific key\n4.To insert after a specific key\n5.To delete in beginning\n6.To delete in end\n7.To enter data at specific position\n8.To reverse list\n9.To display list\n10.To traverse list\n11.To delete specific element\n-1.To exit");
 
     do
     {
@@ -276,6 +309,13 @@ int main()
     case 10:
         {
             traverse();
+            break;
+        }
+    case 11:
+        {
+            printf("\nEnter element to be deleted:");
+            scanf("%d",&ele);
+            deleteElement(ele);
             break;
         }
     case -1:
