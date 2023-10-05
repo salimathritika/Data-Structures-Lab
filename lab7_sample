@@ -209,6 +209,42 @@ void reverse()  //WORKING
     }
 }
 
+// Function to swap data values of two nodes
+void swapData(node* a, node* b) {
+    int temp = a->data;
+    a->data = b->data;
+    b->data = temp;
+}
+
+// Function to perform Bubble Sort on a linked list
+void Sort() {
+    int swapped;
+    node* curr;
+    node* last = NULL;
+    node *temp;
+
+    // Handle empty list or list with only one node
+    if (first == NULL || first->next == NULL) {
+        return;
+    }
+
+    do {
+        swapped = 0;
+        curr = first;
+
+        while (curr->next != last) {
+            temp=curr->next;
+            if (curr->data > temp->data) {
+                swapData(curr, curr->next);
+                swapped = 1;
+            }
+            curr = curr->next;
+        }
+        last = curr;
+    } while (swapped);
+}
+
+
 
 int main()
 {
@@ -236,7 +272,7 @@ int main()
 
     display();
     */
-   printf("\n1.To insert in beginning\n2.To insert at end\n3.To insert before a specific key\n4.To insert after a specific key\n5.To delete in beginning\n6.To delete in end\n7.To enter data at specific position\n8.To reverse list\n9.To display list\n10.To traverse list\n11.To delete specific element\n-1.To exit");
+   printf("\n1.To insert in beginning\n2.To insert at end\n3.To insert before a specific key\n4.To insert after a specific key\n5.To delete in beginning\n6.To delete in end\n7.To enter data at specific position\n8.To reverse list\n9.To display list\n10.To traverse list\n11.To delete specific element\n12.To sort the list\n-1.To exit");
 
     do
     {
@@ -316,6 +352,12 @@ int main()
             printf("\nEnter element to be deleted:");
             scanf("%d",&ele);
             deleteElement(ele);
+            break;
+        }
+    case 12:
+        {
+            Sort();
+            printf("\nList is sorted\n");
             break;
         }
     case -1:
