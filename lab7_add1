@@ -44,11 +44,16 @@ void traverseLinkedList(struct Node* current) {
 int main() {
     struct Node* head = NULL;
 
+    int n,ele;
     // Insert elements into the linked list
-    insertAtEnd(head, 1);
-    insertAtEnd(head, 2);
-    insertAtEnd(head, 3);
-    insertAtEnd(head, 4);
+    printf("Enter the number of nodes in the list:");
+    scanf("%d",&n);
+    for(int i=0;i<n;i++)
+    {
+        printf("Enter the element to be inserted:");
+        insertAtEnd(head,ele);
+    }
+
 
     printf("Linked List: ");
     traverseLinkedList(head);
