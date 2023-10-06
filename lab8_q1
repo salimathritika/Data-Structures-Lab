@@ -1,0 +1,188 @@
+//EDIT
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+};
+
+struct DoublyLinkedList {
+    struct Node* head;
+    struct Node* tail;
+};
+
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void insertRear(struct DoublyLinkedList* list, int data) {
+    struct Node* newNode = createNode(data);
+    if (list->head == NULL) {
+        list->head = list->tail = newNode;
+    } else {
+        newNode->prev = list->tail;
+        list->tail->next = newNode;
+        list->tail = newNode;
+    }
+}
+
+void deleteRear(struct DoublyLinkedList* list) {
+    if (list->head == NULL) {
+        printf("List is empty. Cannot delete from the rear.\n");
+    } else if (list->head == list->tail) {
+        free(list->head);
+        list->head = list->tail = NULL;
+    } else {
+        struct Node* temp = list->tail;
+        list->tail = list->tail->prev;
+        list->tail->next = NULL;
+        free(temp);
+    }
+}
+
+void insertAtPosition(struct DoublyLinkedList* list, int data, int position) {
+    if (position < 0) {
+        printf("Invalid position.\n");
+    } else if (position == 0) {
+        struct Node* newNode = createNode(data);
+        newNode->next = list->head;
+        list->head->prev = newNode;
+        list->head = newNode;
+    } else {
+        struct Node* newNode = createNode(data);
+        struct Node* current = list->head;
+        int currentPos = 0;
+        while (current != NULL && currentPos < position) {
+            current = current->next;
+            currentPos++;
+        }
+        if (current == NULL) {
+            printf("Position not found.\n");
+        } else {
+            newNode->prev = current->prev;
+            newNode->next = current;
+            current->prev->next = newNode;
+            current->prev = newNode;
+        }
+    }
+}
+
+void deleteAtPosition(struct DoublyLinkedList* list, int position) {
+    if (position < 0) {
+        printf("Invalid position.\n");
+    } else if (list->head == NULL) {
+        printf("List is empty. Cannot delete.\n");
+    } else if (position == 0) {
+        struct Node* temp = list->head;
+        list->head = list->head->next;
+        if (list->head != NULL) {
+            list->head->prev = NULL;
+        }
+        free(temp);
+    } else {
+        struct Node* current = list->head;
+        int currentPos = 0;
+        while (current != NULL && currentPos < position) {
+            current = current->next;
+            currentPos++;
+        }
+        if (current == NULL) {
+            printf("Position not found.\n");
+        } else {
+            current->prev->next = current->next;
+            if (current->next != NULL) {
+                current->next->prev = current->prev;
+            }
+            free(current);
+        }
+    }
+}
+
+void traverse(struct DoublyLinkedList* list) {
+    struct Node* current = list->head;
+    while (current != NULL) {
+        printf("%d ", current->data);
+        current = current->next;
+    }
+    printf("\n");
+}
+
+void reverse(struct DoublyLinkedList* list) {
+    struct Node* current = list->head;
+    struct Node* temp = NULL;
+    while (current != NULL) {
+        temp = current->prev;
+        current->prev = current->next;
+        current->next = temp;
+        current = current->prev;
+    }
+    if (temp != NULL) {
+        list->head = temp->prev;
+    }
+}
+
+int main() {
+    struct DoublyLinkedList list;
+    list.head = NULL;
+    list.tail = NULL;
+    int choice, data, position;
+
+    while (1) {
+        printf("\nMenu:\n");
+        printf("1. Insert an element at the rear end of the list\n");
+        printf("2. Delete an element from the rear end of the list\n");
+        printf("3. Insert an element at a given position of the list\n");
+        printf("4. Delete an element from a given position of the list\n");
+        printf("5. Insert an element after another element\n");
+        printf("6. Insert an element before another element\n");
+        printf("7. Traverse the list\n");
+        printf("8. Reverse the list\n");
+        printf("9. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter data to insert at the rear: ");
+                scanf("%d", &data);
+                insertRear(&list, data);
+                break;
+            case 2:
+                deleteRear(&list);
+                break;
+            case 3:
+                printf("Enter data to insert: ");
+                scanf("%d", &data);
+                printf("Enter position: ");
+                scanf("%d", &position);
+                insertAtPosition(&list, data, position);
+                break;
+            case 4:
+                printf("Enter position to delete: ");
+                scanf("%d", &position);
+                deleteAtPosition(&list, position);
+                break;
+            case 7:
+                printf("List: ");
+                traverse(&list);
+                break;
+            case 8:
+                reverse(&list);
+                printf("List reversed.\n");
+                break;
+            case 9:
+                exit(0);
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
+
+    return 0;
+}
