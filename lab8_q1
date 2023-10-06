@@ -1,4 +1,4 @@
-//STILL WO?RKING ON IT
+//STILL WORKING ON IT
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -86,6 +86,92 @@ void delete_specific(int ele)   //WORKS
     }
 }
 
+void insert_rear(int ele)   //WORKING
+{
+    node *temp=(node*)malloc(sizeof(node));
+    temp->data=ele;
+    node *curr;
+    if(first==NULL)
+    {
+        first=temp;
+        first->rlink=NULL;
+        first->llink=NULL;
+    }
+    for(curr=first;curr->rlink!=NULL;curr=curr->rlink);
+    curr->rlink=temp;
+    temp->llink=curr;
+    temp->rlink=NULL;
+}
+
+int delete_rear()   //WORKING
+{
+    node *curr,*prev;
+    int a;
+    if(first==NULL)
+        {printf("\nList is empty\n");return -9999;}
+    else
+    {
+        if(first->rlink==NULL)
+        {
+            a=first->data;
+            first=NULL;
+            return(a);
+        }
+        else
+        {
+            for(curr=first;curr->rlink!=NULL;curr=curr->rlink);
+        prev=curr->llink;
+        prev->rlink=NULL;
+        a=curr->data;
+        free(curr);
+        return(a);
+        }
+
+    }
+}
+
+void insertAfter(int key, int data){    //NO IDEA
+
+   //start from the first link
+   node *curr = first;
+
+   //if list is empty
+   if(first == NULL) {
+      printf("\nList is empty\n");
+   }
+   else
+    {
+        //navigate through list
+   while(curr->data != key) {
+
+      //if it is last node
+      if(curr->rlink == NULL) {
+         return ;
+      } else {
+
+         //move to next link
+         curr = curr->next;
+      }
+   }
+
+   //create a link
+   struct node *newLink = (struct node*) malloc(sizeof(struct node));
+   newLink->key = key;
+   newLink->data = data;
+   if(current == last) {
+      newLink->next = NULL;
+      last = newLink;
+   } else {
+      newLink->next = current->next;
+      current->next->prev = newLink;
+   }
+   newLink->prev = current;
+   current->next = newLink;
+
+    }
+   
+}
+
 int main()
 {
     int n,ele,opt;
@@ -93,13 +179,8 @@ int main()
     scanf("%d",&n);
     create_dll(n);
     display();
-    printf("\nEnter data to be deleted:");
-    scanf("%d",&ele);
-    delete_specific(ele);
-    display();
-    printf("\nLink in reverse is:\n");
-    display_rev();
-    printf("1.To delete an element\n2.To display the list\n3.To display the list in reverse\n");
+
+    printf("\n1.To delete an element\n2.To display the list\n3.To display the list in reverse\n4.To insert element at the rear of the list\n5.To delete from rear of list\n-1.To exit\n");
     do
     {
         printf("\nEnter choice:");
@@ -121,6 +202,20 @@ int main()
         case 3:
             {
                 display_rev();
+                break;
+            }
+        case 4:
+            {
+                printf("\nEnter element to be inserted:");
+                scanf("%d",&ele);
+                insert_rear(ele);
+                break;
+            }
+        case 5:
+            {
+                ele=delete_rear();
+                if(ele!=-9999)
+                printf("\nElement deleted is %d",ele);
                 break;
             }
         case -1:
