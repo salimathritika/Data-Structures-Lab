@@ -1,5 +1,4 @@
-/*insert at beginning,insert at end,insert at given point,delete from beginning,delete from end*/
-//NOT WORKING
+//WORKING
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -244,6 +243,49 @@ void Sort() {
     } while (swapped);
 }
 
+void deleteAlternateNodes() {
+    node* curr = first;
+    node* temp;
+
+    while (curr != NULL && curr->next != NULL) {
+        // Store the next node of the node to be deleted
+        temp = curr->next;
+
+        // Change the next pointer of the current node to skip the next node
+        curr->next = temp->next;
+
+        // Free the memory of the deleted node
+        free(temp);
+
+        // Move to the next pair of nodes
+        curr = curr->next;
+    }
+}
+
+void insertSorted(int n) {
+    node* temp = (node*)malloc(sizeof(node));
+    temp->data=n;
+    node* curr = first;
+    node* prev = NULL;
+
+    // Traverse the list to find the appropriate position
+    while (curr != NULL && curr->data < n) {
+        prev = curr;
+        curr = curr->next;
+    }
+
+    // Insert the new node at the appropriate position
+    if (prev == NULL) {
+        // Insert at the beginning
+        temp->next = first;
+        first = temp;
+    } else {
+        // Insert after 'prev'
+        temp->next = prev->next;
+        prev->next = temp;
+    }
+}
+
 
 
 int main()
@@ -258,21 +300,7 @@ int main()
         insert(n);
     }
     display();
-  /*  printf("\nEnter the data to be inserted:");
-    scanf("%d",&n);
-    printf("\nEnter position:");
-    scanf("%d",&pos);
-    insert_pos(n,pos);
-    display();
-    printf("\nEnter the data to be inserted:");
-    scanf("%d",&n);
-    printf("\nEnter position:");
-    scanf("%d",&pos);
-    insert_pos(n,pos);
-
-    display();
-    */
-   printf("\n1.To insert in beginning\n2.To insert at end\n3.To insert before a specific key\n4.To insert after a specific key\n5.To delete in beginning\n6.To delete in end\n7.To enter data at specific position\n8.To reverse list\n9.To display list\n10.To traverse list\n11.To delete specific element\n12.To sort the list\n-1.To exit");
+   printf("\n1.To insert in beginning\n2.To insert at end\n3.To insert before a specific key\n4.To insert after a specific key\n5.To delete in beginning\n6.To delete in end\n7.To enter data at specific position\n8.To reverse list\n9.To display list\n10.To traverse list\n11.To delete specific element\n12.To sort the list\n13.To delete alternate nodes\n14.To insert element in the sorted list\n-1.To exit");
 
     do
     {
@@ -360,54 +388,22 @@ int main()
             printf("\nList is sorted\n");
             break;
         }
+    case 13:
+        {
+            deleteAlternateNodes();
+            break;
+        }
+    case 14:
+        {
+            printf("\nEnter the data to be inserted:");
+            scanf("%d",&ele);
+            insertSorted(ele);
+            break;
+        }
     case -1:
         printf("\nExiting\n");
     default:printf("Invalid operation");
     }
 
     }while(opt!=-1);
-}
-
-
-
-void deleteAlternateNodes(struct Node* head) {
-    struct Node* current = head;
-    struct Node* temp;
-
-    while (current != NULL && current->next != NULL) {
-        // Store the next node of the node to be deleted
-        temp = current->next;
-
-        // Change the next pointer of the current node to skip the next node
-        current->next = temp->next;
-
-        // Free the memory of the deleted node
-        free(temp);
-
-        // Move to the next pair of nodes
-        current = current->next;
-    }
-}
-
-void insertSorted(struct Node** head, int newData) {
-    struct Node* newNode = createNode(newData);
-    struct Node* current = *head;
-    struct Node* prev = NULL;
-
-    // Traverse the list to find the appropriate position
-    while (current != NULL && current->data < newData) {
-        prev = current;
-        current = current->next;
-    }
-
-    // Insert the new node at the appropriate position
-    if (prev == NULL) {
-        // Insert at the beginning
-        newNode->next = *head;
-        *head = newNode;
-    } else {
-        // Insert after 'prev'
-        newNode->next = prev->next;
-        prev->next = newNode;
-    }
 }
