@@ -367,3 +367,47 @@ int main()
 
     }while(opt!=-1);
 }
+
+
+
+void deleteAlternateNodes(struct Node* head) {
+    struct Node* current = head;
+    struct Node* temp;
+
+    while (current != NULL && current->next != NULL) {
+        // Store the next node of the node to be deleted
+        temp = current->next;
+
+        // Change the next pointer of the current node to skip the next node
+        current->next = temp->next;
+
+        // Free the memory of the deleted node
+        free(temp);
+
+        // Move to the next pair of nodes
+        current = current->next;
+    }
+}
+
+void insertSorted(struct Node** head, int newData) {
+    struct Node* newNode = createNode(newData);
+    struct Node* current = *head;
+    struct Node* prev = NULL;
+
+    // Traverse the list to find the appropriate position
+    while (current != NULL && current->data < newData) {
+        prev = current;
+        current = current->next;
+    }
+
+    // Insert the new node at the appropriate position
+    if (prev == NULL) {
+        // Insert at the beginning
+        newNode->next = *head;
+        *head = newNode;
+    } else {
+        // Insert after 'prev'
+        newNode->next = prev->next;
+        prev->next = newNode;
+    }
+}
