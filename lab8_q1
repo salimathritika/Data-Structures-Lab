@@ -1,0 +1,136 @@
+//STILL WO?RKING ON IT
+
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct
+{
+    struct node*llink;
+    int data;
+    struct node*rlink;
+}node;
+
+node *first=NULL;
+
+node* create(node *prev,int ele,node *next)   //WORKS
+{
+    node *temp=(node*)malloc(sizeof(node));
+    temp->rlink=next;
+    temp->llink=prev;
+    temp->data=ele;
+    return temp;
+}
+
+void create_dll(int n )   //WORKS
+{
+    int i,ele;
+    node *last;
+    printf("Enter the elements:\n");
+    for(i=0;i<n;i++)
+    {
+        scanf("%d",&ele);
+        if(first==NULL)
+            first=last=create(NULL,ele,NULL);
+        else
+            last=last->rlink=create(last,ele,NULL);
+    }
+
+}
+
+void display()   //WORKS
+{
+    node *curr;
+    if(first==NULL)
+        printf("\nList is empty\n");
+    else
+        for(curr=first;curr!=NULL;curr=curr->rlink)
+            printf("%d ",curr->data);
+}
+
+void display_rev()     //WORKS
+{
+    node *curr;
+    if(first==NULL)
+        printf("\nList is empty\n");
+    else
+        {
+            for(curr=first;curr->rlink!=NULL;curr=curr->rlink);
+            for(;curr!=NULL;curr=curr->llink)
+                printf("%d ",curr->data);
+        }
+}
+
+void delete_specific(int ele)   //WORKS
+{
+    node *curr;
+    node *r,*l;
+    for(curr=first;curr!=NULL;curr=curr->rlink)
+    {
+        if(curr->data==ele)
+        {
+            if(curr==first)
+            {
+                first=first->rlink;
+                first->llink=NULL;
+                free(curr);
+            }
+            else
+            {
+                r=curr->rlink;
+                l=curr->llink;
+                l->rlink=curr->rlink;
+                r->llink=curr->llink;
+            }
+
+        }
+    }
+}
+
+int main()
+{
+    int n,ele,opt;
+    printf("Enter the number of nodes:");
+    scanf("%d",&n);
+    create_dll(n);
+    display();
+    printf("\nEnter data to be deleted:");
+    scanf("%d",&ele);
+    delete_specific(ele);
+    display();
+    printf("\nLink in reverse is:\n");
+    display_rev();
+    printf("1.To delete an element\n2.To display the list\n3.To display the list in reverse\n");
+    do
+    {
+        printf("\nEnter choice:");
+        scanf("%d",&opt);
+        switch(opt)
+        {
+        case 1:
+            {
+                printf("\nEnter element to be deleted:");
+                scanf("%d",&ele);
+                delete_specific(ele);
+                break;
+            }
+        case 2:
+            {
+                display();
+                break;
+            }
+        case 3:
+            {
+                display_rev();
+                break;
+            }
+        case -1:
+            {
+                printf("\nExiting\n");
+                break;
+            }
+        default:
+            printf("\nInvalid operation\n");
+        }
+
+    }while(opt!=-1);
+}
