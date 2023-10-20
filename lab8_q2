@@ -1,0 +1,38 @@
+//STILL WORKING ON IT
+
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct
+{
+    struct node*llink;
+    int data;
+    struct node*rlink;
+}node;
+
+node*insert(int ele,node *a)
+{
+    node *first=a;
+    node *curr,*temp;
+    temp=(node*)malloc(sizeof(node));
+    temp->data=ele;
+    for(curr=first;curr->rlink!=NULL;curr=curr->rlink);
+    curr-rlink=temp;
+    temp->llink=curr;
+    temp->rlink=NULL;
+    
+}
+
+int main()
+{
+    node *x1=NULL,*x2=NULL;
+    int n,i,ele;
+    printf("Enter the number of nodes in x1:");
+    scanf("%d",&n);
+    printf("Enter elements to be inserted:\n");
+    for(i=0;i<n;i++)
+    {
+        scanf("%d",&ele);
+        x1=insert()
+    }
+}
