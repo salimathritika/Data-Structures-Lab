@@ -1,4 +1,4 @@
-//STILL WORKING ON IT
+//ONLY REVERSE FUNCTION HAS TO BE WRITTEN
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -130,57 +130,102 @@ int delete_rear()   //WORKING
     }
 }
 
-void insertAfter(int key, int data){    //NO IDEA
+void insert_after(int key,int data)  //WORKING
+{
+    node *curr,*temp;
+    curr=first;
+    temp=(node *)malloc(sizeof(node));
+    temp->data=data;
 
-   //start from the first link
-   node *curr = first;
-
-   //if list is empty
-   if(first == NULL) {
-      printf("\nList is empty\n");
-   }
-   else
+    if(first==NULL)
+        printf("\nList is empty\n");
+    else
     {
-        //navigate through list
-   while(curr->data != key) {
-
-      //if it is last node
-      if(curr->rlink == NULL) {
-         return ;
-      } else {
-
-         //move to next link
-         curr = curr->next;
-      }
-   }
-
-   //create a link
-   struct node *newLink = (struct node*) malloc(sizeof(struct node));
-   newLink->key = key;
-   newLink->data = data;
-   if(current == last) {
-      newLink->next = NULL;
-      last = newLink;
-   } else {
-      newLink->next = current->next;
-      current->next->prev = newLink;
-   }
-   newLink->prev = current;
-   current->next = newLink;
-
+        while(curr->rlink!=NULL)
+        {
+            if(curr->data==key)
+            {
+                temp->rlink=curr->rlink;
+                temp->llink=curr;
+                curr->rlink=temp;
+            }
+            curr=curr->rlink;
+        }
     }
-   
 }
+
+void insert_bef_key(int key,int data)  //WORKS
+{
+    node *curr,*prev,*temp;
+    temp=(node*)malloc(sizeof(node));
+    temp->data=data;
+    curr=first;
+    if(first==NULL)
+        printf("\nList is empty\n");
+    else if(first->data==key)
+    {
+        temp->rlink=first;
+        temp->llink=NULL;
+        first->llink=temp;
+        first=temp;
+    }
+    else
+    {
+        while(curr->rlink!=NULL)
+        {
+            if(curr->data==key)
+            {
+                prev=curr->llink;
+                curr->llink=temp;
+                temp->rlink=curr;
+                prev->rlink=temp;
+            }
+            curr=curr->rlink;
+        }
+    }
+}
+
+void insert_pos(int pos,int data)   //WORKS
+{
+    int i=0;
+    node *curr=first;
+    node *temp=(node*)malloc(sizeof(node));
+    temp->data=data;
+    if(first==NULL)
+        printf("\nList is empty\n");
+    else
+    {
+        while(curr->rlink!=NULL)
+        {
+            i++;
+            if(i==pos)
+            {
+                insert_bef_key(curr->data,data);
+            }
+            curr=curr->rlink;
+        }
+    }
+}
+
+void traverse()  //WORKS
+{
+    node *curr=first;
+    int i=0;
+    for(curr=first;curr!=NULL;curr=curr->rlink)
+        i++;
+    printf("\nAfter traversing the number of nodes present is %d\n",i);
+}
+
 
 int main()
 {
-    int n,ele,opt;
+    int n,ele,opt,key,pos;
     printf("Enter the number of nodes:");
     scanf("%d",&n);
     create_dll(n);
     display();
 
-    printf("\n1.To delete an element\n2.To display the list\n3.To display the list in reverse\n4.To insert element at the rear of the list\n5.To delete from rear of list\n-1.To exit\n");
+    printf("\n1.To delete an element\n2.To display the list\n3.To display the list in reverse\n4.To insert element at the rear of the list\n5.To delete from rear of list\n6.To insert element after a key\n7.To insert element before a key\n8.To insert at specific position\n9.To traverse the list\n-1.To exit\n");
     do
     {
         printf("\nEnter choice:");
@@ -218,6 +263,38 @@ int main()
                 printf("\nElement deleted is %d",ele);
                 break;
             }
+        case 6:
+            {
+                printf("\nEnter key after which to be inserted:");
+                scanf("%d",&key);
+                printf("\nEnter data to be inserted:");
+                scanf("%d",&ele);
+                insert_after(key,ele);
+                break;
+            }
+            case 7:
+            {
+                printf("\nEnter key before which to be inserted:");
+                scanf("%d",&key);
+                printf("\nEnter data to be inserted:");
+                scanf("%d",&ele);
+                insert_bef_key(key,ele);
+                break;
+            }
+            case 8:
+            {
+                printf("\nEnter position at which data is to be inserted:");
+                scanf("%d",&pos);
+                printf("\nEnter data to be inserted:");
+                scanf("%d",&ele);
+                insert_pos(pos,ele);
+                break;
+            }
+            case 9:
+                {
+                    traverse();
+                    break;
+                }
         case -1:
             {
                 printf("\nExiting\n");
