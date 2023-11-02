@@ -1,111 +1,151 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-typedef struct
+struct node
 {
-    int coe;
-    int exp;
-    struct node*next;
-}node;
+    int coef,expo;
+    struct node* next;
+};
 
-node*create(int c,int e,node*ptr)
+struct node* insertpoly(struct node* thead,int c,int e);
+struct node* append(struct node* thead,int c,int e);
+struct node* polyaddition(struct node* p1thead,struct node* p2thead);
+void display(struct node* thead);
+
+void main()
 {
-    node*temp;
-    temp=(node*)malloc(sizeof(node));
-    temp->coe=c;
-    temp->exp=e;
-    temp->next=ptr;
-    return temp;
+    int a,b,n,i;
+    struct node* p1head,* p2head,* p3head;
+    p1head=p2head=NULL;
+
+    // Inputing the first polynomial..
+
+    printf("Enter the no of terms of polynomial 1..");
+    scanf("%d",&n);
+    printf("\nEnter the polynomial..");
+    for(i=0;i<n;i++){
+        printf("\nEnter the coefficient and exponent of the term..");
+        scanf("%d%d",&a,&b);
+        p1head=insertpoly(p1head,a,b);
+    }
+
+    // Inputing the second polynomial..
+
+    printf("\nEnter the no of terms of polynomial 2..");
+    scanf("%d",&n);
+    printf("\nEnter the polynomial..");
+    for(i=0;i<n;i++){
+        printf("\nEnter the coefficient and exponent of the term..");
+        scanf("%d%d",&a,&b);
+        p2head=insertpoly(p2head,a,b);
+    }
+
+    //Performing Addition..
+
+    p3head=polyaddition(p1head,p2head);
+
+    //Displaying the polynomial..
+
+    printf("\nThe polynomial 1 is..");
+    display(p1head);
+    printf("\nThe polynomial 2 is..");
+    display(p2head);
+    printf("\nThe sum of the two polynomials is..");
+    display(p3head);
 }
 
-node* create_poly(int n)
+struct node* append(struct node* thead,int c,int e)
 {
-    int i,c,e;
-    node*rear;
-    node* first;
-    for(i=0;i<n;i++)
-    {
-        scanf("%d%d",&c,&e);
-        if(first==NULL)
-        {
-            first=create(c,e,NULL);
-            rear=first;
-        }
-        else
-            rear=rear->next=create(c,e,NULL);
+    struct node* newnode = (struct node*)malloc(sizeof(struct node));
+    newnode->coef=c;
+    newnode->expo=e;
+    if(thead==NULL){// Corner Case to handle if the list is empty...
+    newnode->next=NULL;
+    return newnode;
     }
-    return first;
+    struct node* trav=thead;
+    while(trav->next!=NULL) // Traversing to point to the last node...
+        trav=trav->next;
+    trav->next=newnode;
+    newnode->next=NULL;
+    return thead;
 }
 
-node*add(node *a,node *b)  //NOT WORKING
+struct node* insertpoly(struct node* thead,int c,int e)
 {
-    node *front,*rear,*temp;
-    rear=front=create(0,0,NULL);
-    while((a!=NULL)&&(b!=NULL))
-    {
-        if(a->exp==b->exp)
-        {
-            rear=rear->next=create((a->coe)+(b->coe),a->exp,NULL);
-            a=a->next;
-            b=b->next;
-        }
-        else if((a->exp)>(b->exp))
-        {
-            rear=rear->next=create(a->coe,a->exp,NULL);
-            a=a->next;
-        }
-        else
-        {
-            rear=rear->next=create(b->coe,b->exp,NULL);
-            b=b->next;
-        }
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->coef=c;
+    newnode->expo=e;
+    if(thead==NULL){            // for inserting the first node..
+        newnode->next=NULL;
+        return newnode;
     }
-    while(b!=NULL)
-    {
-        rear=rear->next=create(b->coe,b->exp,NULL);
-        b=b->next;
+    struct node* prev,* curr;
+    prev=curr=thead;
+    while(curr!=NULL && curr->expo>e){
+        prev=curr;
+        curr=curr->next;
     }
-    while(a!=NULL)
-    {
-        rear=rear->next=create(a->coe,a->exp,NULL);
-        a=a->next;
+    if(curr==thead){            // for inserting before the first node...
+        newnode->next=curr;
+        return newnode;
     }
-
-    //To delete dummy node
-    temp=front;
-    front=front->next;
-    free(temp);
-    return front;
+    else if(curr==NULL){        //for inserting after the last node....
+        prev->next=newnode;
+        newnode->next=NULL;
+    }
+    else{
+        newnode->next=curr;
+        prev->next=newnode;
+    }
+    return thead;
 }
 
-void display(node *temp)  //NOT WORKING
+struct node* polyaddition(struct node* p1thead,struct node* p2thead)
 {
-    if(temp==NULL)
-        printf("\nEmpty\n");
-    else
-    {
-        while(temp!=NULL)
-        {
-            printf("%d^x%d+",temp->coe,temp->exp);
+    struct node* ans=NULL;
+    struct node* t1,* t2;
+    t1=p1thead;
+    t2=p2thead;
+    while(t1!=NULL && t2!=NULL){
+        if(t1->expo > t2->expo){
+            ans=append(ans,t1->coef,t1->expo);
+            t1=t1->next;
+        }
+        else if(t1->expo < t2->expo){
+            ans=append(ans,t2->coef,t2->expo);
+            t2=t2->next;
+        }
+        else{
+            ans=append(ans,(t1->coef)+(t2->coef),t1->expo);
+            t1=t1->next;
+            t2=t2->next;
+        }
+    }
+
+    while(t1!=NULL){            //coping the remaining terms of polynomial 1...
+        ans=append(ans,t1->coef,t1->expo);
+        t1=t1->next;
+    }
+
+    while(t2!=NULL){            //coping the remaining terms of polynomial 2...
+        ans=append(ans,t2->coef,t2->expo);
+        t2=t2->next;
+    }
+    return ans;
+}
+
+void display(struct node* thead)
+{
+    struct node* temp=thead;
+    if(temp==NULL){
+        printf("\nEmpty..");
+    }
+    else{
+        while(temp->next!=NULL){
+            printf(" %dx^%d +",temp->coef,temp->expo);
             temp=temp->next;
         }
+       printf(" %dx^%d ",temp->coef,temp->expo);
     }
-}
-
-int main()
-{
-    int n;
-    printf("Enter the number of elements of first polynomial:");
-    scanf("%d",&n);
-    node *poly1=create_poly(n);
-    printf("Enter the number of elements of second polynomial:");
-    scanf("%d",&n);
-    node *poly2=create_poly(n);
-    printf("WOrked till here");
-    display(poly1);
-    display(poly2);
-    node *poly3=add(poly1,poly2);
-    printf("WOrked till here");
-
-    display(poly3);
 }
