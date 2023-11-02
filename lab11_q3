@@ -44,7 +44,7 @@ void create(int n)
     }
 }
 
-bst*search(int key)
+/*bst*search(int key)
 {
     bst *curr=root;
     while(curr!=NULL)
@@ -58,6 +58,19 @@ bst*search(int key)
     }
 
     return (NULL);
+}*/
+bst* search(bst* root, int key)
+{
+    // Base Cases: root is null or key is present at root
+    if (root == NULL || root->data == key)
+        return root;
+
+    // Key is greater than root's key
+    if (root->data < key)
+        return search(root->rchild, key);
+
+    // Key is smaller than root's key
+    return search(root->lchild, key);
 }
 
 int main()
@@ -72,7 +85,7 @@ int main()
     int key;
     scanf("%d",&key);
     bst *x;
-    x=search(key);
+    x=search(root,key);
     printf("\nElement found %d",x->data);
 }
 
