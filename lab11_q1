@@ -1,0 +1,53 @@
+//WORKS
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct
+{
+    int data;
+    struct tree *lchild;
+    struct tree *rchild;
+}bst;
+
+bst *root=NULL;
+
+void create(int n)
+{
+    int key,flag=0;
+    bst *curr=root;
+    while(n>0)
+    {
+        printf("Enter key:");
+        scanf("%d",&key);
+        bst *temp=(bst*)malloc(sizeof(bst));
+        temp->data=key;
+        temp->rchild=NULL;
+        temp->lchild=NULL;
+        curr=root;
+        while(curr!=NULL)
+        {
+            if(curr->data>key)
+                curr=curr->lchild;
+            else if(curr->data<key)
+                curr=curr->rchild;
+            else
+            {
+                printf("This key already exists");
+                flag=1;
+                break;
+            }
+        }
+        if(flag==0)
+            curr=temp;
+        n--;
+    }
+}
+
+int main()
+{
+    int n;
+    printf("Enter the total number of nodes:");
+    scanf("%d",&n);
+    create(n);
+    printf("\nTree is created");
+}
