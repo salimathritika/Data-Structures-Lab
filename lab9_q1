@@ -71,3 +71,82 @@ int main()
         }
     }while(opt!=-1);
 }
+-----------------------------------------------------------------------------------------------------------
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct
+{
+    int data;
+    struct node *left;
+    struct node *right;
+}node;
+
+
+
+
+void insert(node *first,node *head,int n)
+{
+    node *temp=(node*)malloc(sizeof(node));
+    temp->data=n;
+    temp->right=NULL;
+    temp->left=NULL;
+    node *curr;
+    for(curr=first;curr->right!=head;curr=curr->right);
+    temp->right=head;
+    temp->left=curr;
+    curr->right=temp;
+}
+
+void display(node *first,node *head)
+{
+    node *curr;
+    if(first->right!=head)
+    {
+        for(curr=first;curr->right!=head;curr=curr->right)
+        {
+            if(curr->data==-999)
+                printf("head->");
+            else
+                printf("%d->",curr->data);
+        }
+
+        printf("%d->head",curr->data);
+    }
+}
+
+int main()
+{
+    node *head=(node*)malloc(sizeof(node));
+    head->data=-999;
+    head->left=NULL;
+    head->right=NULL;
+    node *first=head;
+    first->right=head;
+    int opt,n,ele;
+    printf("1.To insert element\n2.To display\n-1.To exit");
+    do
+    {
+        printf("\nEnter choice:");
+        scanf("%d",&opt);
+        switch(opt)
+        {
+        case 1:
+            {
+                printf("\nEnter element to be inserted:");
+                scanf("%d",&ele);
+                insert(first,head,ele);
+                break;
+            }
+        case 2:
+            {
+                display(first,head);
+                break;
+            }
+        case -1:
+            {
+                printf("\nExiting\n");
+            }
+        }
+    }while(opt!=-1);
+}
