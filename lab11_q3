@@ -1,91 +1,83 @@
-//NOT WORKING
+#include <stdio.h>
+#include <stdlib.h>
 
-#include<stdio.h>
-#include<stdlib.h>
-
-typedef struct
-{
-    int data;
-    struct tree *lchild;
-    struct tree *rchild;
+typedef struct {
+    int key;
+    struct bst* left;
+    struct bst* right;
 }bst;
 
-bst *root=NULL;
+bst* createNode(int key) {
+    bst* newNode = (bst*)malloc(sizeof(bst));
+    newNode->key = key;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
 
-void create(int n)
-{
-    int key,flag=0;
-    bst *curr=root;
-    while(n>0)
-    {
-        printf("Enter key:");
-        scanf("%d",&key);
-        bst *temp=(bst*)malloc(sizeof(bst));
-        temp->data=key;
-        temp->rchild=NULL;
-        temp->lchild=NULL;
-        curr=root;
-        while(curr!=NULL)
-        {
-            if(curr->data>key)
-                curr=curr->lchild;
-            else if(curr->data<key)
-                curr=curr->rchild;
-            else
-            {
-                printf("This key already exists");
-                flag=1;
-                break;
-            }
-        }
-        if(flag==0)
-            curr=temp;
-        n--;
+bst* insert(bst* root, int key) {
+    if (root == NULL) {
+        return createNode(key);
+    }
+
+    if (key < root->key) {
+        root->left = insert(root->left, key);
+    } else if (key > root->key) {
+        root->right = insert(root->right, key);
+    }
+
+    return root;
+}
+
+void inOrderTraversal(bst* root) {
+    if (root != NULL) {
+        inOrderTraversal(root->left);
+        printf("%d ", root->key);
+        inOrderTraversal(root->right);
     }
 }
 
-/*bst*search(int key)
-{
-    bst *curr=root;
-    while(curr!=NULL)
-    {
-        if((curr->data)==key)
-            return curr;
-        if((curr->data)>key)
-            curr=curr->rchild;
-        else
-            curr=curr->lchild;
-    }
-
-    return (NULL);
-}*/
-bst* search(bst* root, int key)
-{
-    // Base Cases: root is null or key is present at root
-    if (root == NULL || root->data == key)
+bst* search(bst* root, int key) {
+    if (root == NULL || root->key == key) {
         return root;
+    }
 
-    // Key is greater than root's key
-    if (root->data < key)
-        return search(root->rchild, key);
+    if (key < root->key) {
+        return search(root->left, key);
+    }
 
-    // Key is smaller than root's key
-    return search(root->lchild, key);
+    return search(root->right, key);
 }
 
-int main()
-{
-    int n;
-    printf("Enter the total number of nodes:");
-    scanf("%d",&n);
-    create(n);
-    printf("\nTree is created");
 
-    printf("\nEnter key to be searched:");
-    int key;
-    scanf("%d",&key);
-    bst *x;
-    x=search(root,key);
-    printf("\nElement found %d",x->data);
+int main() {
+    bst* root = NULL;
+
+    int n, keyToSearch;
+
+    printf("Enter the number of elements in the BST: ");
+    scanf("%d", &n);
+
+    printf("Enter the elements of the BST:\n");
+    for (int i = 0; i < n; ++i) {
+        int key;
+        scanf("%d", &key);
+        root = insert(root, key);
+    }
+
+    printf("Enter the key to search in the BST: ");
+    scanf("%d", &keyToSearch);
+
+    printf("In-order traversal of the BST: ");
+    inOrderTraversal(root);
+    printf("\n");
+
+    bst* result = search(root, keyToSearch);
+
+    if (result != NULL) {
+        printf("Key %d is found in the BST.\n", keyToSearch);
+    } else {
+        printf("Key %d is not found in the BST.\n", keyToSearch);
+    }
+
+    return 0;
 }
-
