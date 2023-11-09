@@ -1,0 +1,135 @@
+//complete
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct node
+{
+    int data;
+    struct node* llink;
+    struct node* rlink;
+} node;
+
+node* n1 = NULL;
+node* n2 = NULL;
+node* res = NULL;
+
+node * insert(node* first, int val)
+{
+    node* curr;
+    node* temp = (node*) malloc(sizeof(node));
+    temp->data = val;
+    temp->rlink = NULL;
+    temp->llink = NULL;
+
+    if(first==NULL)
+    {
+        first= temp;
+    }
+    else
+    {
+        for(curr=first;curr->rlink!=NULL;curr=curr->rlink);
+
+        curr->rlink = temp;
+        temp->llink = curr;
+    }
+    return first;
+
+}
+
+node * insertAtFirst(node* first, int val)
+{
+    node* curr;
+    node* temp = (node*) malloc(sizeof(node));
+    temp->data = val;
+    temp->rlink = NULL;
+    temp->llink = NULL;
+
+    if(first==NULL)
+    {
+        first= temp;
+    }
+    else
+    {
+        temp->rlink = first;
+        first->llink = temp;
+        first = temp;
+    }
+    return first;
+
+}
+
+void display(node* first)
+{
+    if(first == NULL)
+    {printf("List is empty");}
+    node* curr;
+
+    for(curr=first;curr!=NULL; curr = curr->rlink)
+        printf("%d", curr->data);
+    printf("\n");
+}
+
+
+int main()
+{
+    char long1[20],long2[20];
+    int i=0;
+    printf("Enter 2 long integers\n");
+    scanf("%s",long1);
+    scanf("%s",long2);
+
+
+
+    while(long1[i]!='\0')
+    {
+        n1 = insert(n1,long1[i] - '0');
+        i++;
+    }
+    i = 0;
+    while(long2[i]!='\0')
+    {
+        n2 = insert(n2,long2[i] - '0');
+        i++;
+    }
+
+    node*curr1;
+    node*curr2;
+
+    for(curr1=n1; curr1->rlink != NULL; curr1 = curr1->rlink);
+    for(curr2=n2; curr2->rlink != NULL; curr2 = curr2->rlink);
+
+    int sum=0,carry=0;
+
+    while(curr1 != NULL || curr2 != NULL)
+    {
+        int x,y;
+
+        if(curr1 == NULL) x = 0;
+        else x = curr1->data;
+
+        if(curr2 == NULL) y = 0;
+        else y = curr2->data;
+
+        sum = x+y+carry;
+
+        if(sum>=10)
+        {
+            carry = sum/10;
+            sum  = sum%10;
+        }
+        else
+        {
+            carry = 0;
+        }
+        res = insertAtFirst(res,sum);
+
+        if(curr1!=NULL) curr1 = curr1->llink;
+        if(curr2!=NULL) curr2 = curr2->llink;
+    }
+    if(carry!=0) res = insertAtFirst(res,carry);
+    printf("\nThe result is:");
+    display(res);
+
+
+    return 0;
+}
