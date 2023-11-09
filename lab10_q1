@@ -1,142 +1,97 @@
-//CREATE FUNCTION ITSELF NOT WORKING
-
+//WORKS
 #include<stdio.h>
 #include<stdlib.h>
 
-typedef struct
+typedef struct tree
 {
     int data;
     struct tree *lchild;
     struct tree *rchild;
-}tree;
+} tree;
 
 tree *root;
 
-void inorder()
+void inorder(tree *root)
 {
-    tree *curr=root;
-    tree *stack[20];
-    int top=-1;
-    while(1)
+    if (root != NULL)
     {
-        while(curr!=NULL)
-        {
-            stack[++top]=curr;
-            curr=curr->lchild;
-        }
-        if(top>-1)
-            curr=stack[top--];
-        else
-            break;
-        printf("%d ",curr->data);
-        curr=curr->rchild;
+        inorder(root->lchild);
+        printf("%d ", root->data);
+        inorder(root->rchild);
     }
 }
 
-void postorder()
+void postorder(tree *root)
 {
-    tree *curr=root;
-    tree *stack[20];
-    int top=-1;
-    while(1)
+    if (root != NULL)
     {
-        while(curr!=NULL)
-        {
-            stack[++top]=curr;
-            curr=curr->lchild;
-        }
-        if(top>-1)
-            curr=stack[top--];
-        else
-            break;
-        curr=curr->rchild;
-        printf("%d ",curr->data);
+        postorder(root->lchild);
+        postorder(root->rchild);
+        printf("%d ", root->data);
     }
 }
 
-void preorder()
+void preorder(tree *root)
 {
-    tree*curr=root;
-    tree *stack[20];
-    int top=-1;
-    while(1)
+    if (root != NULL)
     {
-        while(curr!=NULL)
-        {
-            printf("%d ",curr->data);
-            stack[++top]=curr;
-            curr=curr->lchild;
-        }
-        if(top>-1)
-            curr=stack[top--];
-        else
-            break;
-        curr=curr->rchild;
+        printf("%d ", root->data);
+        preorder(root->lchild);
+        preorder(root->rchild);
     }
 }
 
-void count_leaf()
+void count_leaf(tree *root, int *cl, int *tot)
 {
-    tree *curr=root;
-    tree *q[20];
-    int front=-1,rear=-1,cl=0,tot=0;
-    q[++rear]=root;
-    while(front!=rear)
+    if (root != NULL)
     {
-        curr=q[++front];
-        tot++;
-        if(curr->lchild==NULL && curr->rchild==NULL)
-            cl++;
-        if(curr->lchild!=NULL)
-            q[++rear]=curr->lchild;
-        if(curr->rchild!=NULL)
-            q[++rear]=curr->rchild;
+        (*tot)++;
+        if (root->lchild == NULL && root->rchild == NULL)
+            (*cl)++;
+        count_leaf(root->lchild, cl, tot);
+        count_leaf(root->rchild, cl, tot);
     }
-    printf("Leaf nodes:%d",cl);
-    printf("Non leaf nodes:%d",(tot-cl));
 }
 
 void create_BT()
 {
-    tree *curr=root;
-    tree *temp;
-    tree *prev;
-    int i,n,j;
+    tree *curr, *temp, *prev;
+    int i, n, j;
     printf("Enter no. of nodes:");
-    scanf("%d",&n);
+    scanf("%d", &n);
     char dir[20];
-    for(j=0;j<n;j++)
+    for (j = 0; j < n; j++)
     {
-        temp=(tree*)malloc(sizeof(tree));
+        temp = (tree *)malloc(sizeof(tree));
         printf("Enter data:");
-        scanf("%d",&temp->data);
-        temp->lchild=NULL;
-        temp->rchild=NULL;
-        if(root==NULL)
-            root=temp;
+        scanf("%d", &temp->data);
+        temp->lchild = NULL;
+        temp->rchild = NULL;
+        if (root == NULL)
+            root = temp;
         else
         {
             printf("enter the direction:");
-            scanf("%s",dir);
-            curr=root;
-            i=0;
-            while(dir[i]!='\0')
+            scanf("%s", dir);
+            curr = root;
+            i = 0;
+            while (dir[i] != '\0')
             {
-                prev=curr;
-                if(dir[i]=='l' || dir[i]=='L')
-                    curr=curr->lchild;
+                prev = curr;
+                if (dir[i] == 'l' || dir[i] == 'L')
+                    curr = curr->lchild;
                 else
-                    curr=curr->rchild;
+                    curr = curr->rchild;
                 i++;
             }
-            if(curr!=NULL || dir[i]!='\0')
+            if (curr != NULL || dir[i] != '\0')
                 printf("Invalid direction entered");
             else
             {
-                if(dir[i-1]=='l')
-                    prev->lchild=temp;
+                if (dir[i - 1] == 'l')
+                    prev->lchild = temp;
                 else
-                    prev->rchild=temp;
+                    prev->rchild = temp;
             }
         }
     }
@@ -144,61 +99,75 @@ void create_BT()
 
 int depth(tree *ptr)
 {
-    int ldepth=0,rdepth=0;
-    if(ptr==NULL)
+    int ldepth = 0, rdepth = 0;
+    if (ptr == NULL)
         return 0;
     else
     {
-        ldepth=depth(ptr->rchild);
-        rdepth=depth(ptr->rchild);
-        if(ldepth>rdepth)
-            printf("%d",(ldepth));
+        ldepth = depth(ptr->lchild);
+        rdepth = depth(ptr->rchild);
+        if (ldepth > rdepth)
+            return (ldepth + 1);
         else
-            printf("%d",(rdepth+1));
+            return (rdepth + 1);
     }
 }
 
 int main()
 {
     int opt;
-    printf("1.To create binary tree\n2.To find depth of tree\n3.To print inorder traversal\n4.to print postorder traversal\n5.To print preoder traversal\n6.To count number of leaf nodes\n-1.To exit\n");
-    scanf("%d",&opt);
-    switch(opt)
+    do
     {
-    case 1:
+        printf("\n1.To create binary tree\n2.To find depth of tree\n3.To print inorder traversal\n4.To print postorder traversal\n5.To print preoder traversal\n6.To count number of leaf nodes\n-1.To exit\n");
+        scanf("%d", &opt);
+        switch (opt)
+        {
+        case 1:
         {
             create_BT();
             break;
         }
-    case 2:
+        case 2:
         {
-            int d=depth(root);
-            printf("Depth of tree=%d",d);
+            int d = depth(root);
+            printf("Depth of tree=%d", d);
             break;
         }
-    case 3:
+        case 3:
         {
-            inorder();
+            inorder(root);
             break;
         }
-    case 4:
+        case 4:
         {
-            postorder();
+            postorder(root);
             break;
         }
-    case 5:
+        case 5:
         {
-            preorder();
+            preorder(root);
             break;
         }
-    case 6:
+        case 6:
         {
-            count_leaf();
+            int cl = 0, tot = 0;
+            count_leaf(root, &cl, &tot);
+            printf("Leaf nodes: %d\n", cl);
+            printf("Non-leaf nodes: %d\n", (tot - cl));
             break;
         }
-    case -1:
+        case -1:
         {
             printf("Exiting\n");
+            break;
         }
-    }while(opt!=-1);
+        default:
+        {
+            printf("Invalid option\n");
+            break;
+        }
+        }
+    } while (opt != -1);
+
+    return 0;
 }
