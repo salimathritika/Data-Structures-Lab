@@ -1,29 +1,56 @@
-//NEED TO EDIT 
-
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define a structure for a linked list node
 struct Node {
     int data;
     struct Node* next;
 };
 
-// Function to create a new node
 struct Node* createNode(int data) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    if (newNode == NULL) {
-        printf("Memory allocation failed!\n");
-        exit(1);
-    }
+
     newNode->data = data;
     newNode->next = NULL;
     return newNode;
 }
 
-// Function to merge two sorted linked lists X and Y into a new linked list Z
+struct Node* insertSorted(struct Node* head, int data) {
+    struct Node* newNode = createNode(data);
+
+    if (head == NULL || data <= head->data) {
+        newNode->next = head;
+        return newNode;
+    }
+
+    struct Node* current = head;
+
+    while (current->next != NULL && current->next->data < data) {
+        current = current->next;
+    }
+
+    newNode->next = current->next;
+    current->next = newNode;
+
+    return head;
+}
+
+struct Node* createSortedLinkedList() {
+    struct Node* head = NULL;
+    int n, data;
+
+    printf("Enter the number of nodes in the sorted list: ");
+    scanf("%d", &n);
+
+    printf("Enter the sorted elements of the list:\n");
+    for (int i = 0; i < n; ++i) {
+        scanf("%d", &data);
+        head = insertSorted(head, data);
+    }
+
+    return head;
+}
+
 struct Node* mergeSortedLists(struct Node* X, struct Node* Y) {
-    // Initialize a dummy node to simplify insertion at the beginning
     struct Node dummy;
     struct Node* tail = &dummy;
     dummy.next = NULL;
@@ -39,18 +66,15 @@ struct Node* mergeSortedLists(struct Node* X, struct Node* Y) {
         tail = tail->next;
     }
 
-    // Attach the remaining nodes from X or Y if any
     if (X != NULL) {
         tail->next = X;
     } else {
         tail->next = Y;
     }
 
-    // Return the merged list, skip the dummy node
     return dummy.next;
 }
 
-// Function to print the linked list
 void printLinkedList(struct Node* head) {
     struct Node* current = head;
     while (current != NULL) {
@@ -61,13 +85,8 @@ void printLinkedList(struct Node* head) {
 }
 
 int main() {
-    struct Node* X = createNode(1);
-    X->next = createNode(3);
-    X->next->next = createNode(5);
-
-    struct Node* Y = createNode(2);
-    Y->next = createNode(4);
-    Y->next->next = createNode(6);
+    struct Node* X = createSortedLinkedList();
+    struct Node* Y = createSortedLinkedList();
 
     printf("List X: ");
     printLinkedList(X);
@@ -79,8 +98,6 @@ int main() {
 
     printf("Merged List Z: ");
     printLinkedList(Z);
-
-    // Free the memory allocated for the merged list (Z) in a real program
 
     return 0;
 }
