@@ -1,0 +1,103 @@
+//WORKS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct  {
+    int data;
+    struct Node* next;
+}Node;
+
+Node* createNode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+Node* insertNode(Node* head, int data) {
+    Node* newNode = createNode(data);
+
+    if (head == NULL) {
+        return newNode;
+    }
+
+    Node* current = head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+
+    current->next = newNode;
+    return head;
+}
+
+Node* merge(Node* list1, Node* list2) {
+    Node* mergedList = NULL;
+    Node* curr1 = list1;
+    Node* curr2 = list2;
+
+    while (curr1 != NULL && curr2 != NULL) {
+        mergedList = insertNode(mergedList, curr1->data);
+        mergedList = insertNode(mergedList, curr2->data);
+        curr1 = curr1->next;
+        curr2 = curr2->next;
+    }
+
+    while (curr1 != NULL) {
+        mergedList = insertNode(mergedList, curr1->data);
+        curr1 = curr1->next;
+    }
+
+    while (curr2 != NULL) {
+        mergedList = insertNode(mergedList, curr2->data);
+        curr2 = curr2->next;
+    }
+
+    return mergedList;
+}
+
+void display(Node* head) {
+    Node* curr = head;
+    while (curr != NULL) {
+        printf("%d -> ", curr->data);
+        curr = curr->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    Node* list1 = NULL;
+    Node* list2 = NULL;
+
+    int n1, n2, data;
+
+    printf("Enter the number of elements in list1: ");
+    scanf("%d", &n1);
+
+    printf("Enter the elements of list1:\n");
+    for (int i = 0; i < n1; ++i) {
+        scanf("%d", &data);
+        list1 = insertNode(list1, data);
+    }
+
+    printf("Enter the number of elements in list2: ");
+    scanf("%d", &n2);
+
+    printf("Enter the elements of list2:\n");
+    for (int i = 0; i < n2; ++i) {
+        scanf("%d", &data);
+        list2 = insertNode(list2, data);
+    }
+
+    Node* mergedList = merge(list1, list2);
+
+    printf("List 1: ");
+    display(list1);
+
+    printf("List 2: ");
+    display(list2);
+
+    printf("Merged List: ");
+    display(mergedList);
+
+    return 0;
+}
