@@ -1,0 +1,95 @@
+//WORKING
+
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure for a binary tree
+typedef struct {
+    int data;
+    struct tree* lchild;
+    struct tree* rchild;
+}tree;
+
+
+// Function to check the equality of two binary trees
+int areEqual(tree* root1, tree* root2) {
+    if (root1 == NULL && root2 == NULL) {
+        return 1; // Both trees are empty, consider them equal
+    }
+
+    if (root1 != NULL && root2 != NULL) {
+        // Check if the current nodes are equal, and recursively check left and right subtrees
+        return (root1->data == root2->data) &&
+               areEqual(root1->lchild, root2->lchild) &&
+               areEqual(root1->rchild, root2->rchild);
+    }
+
+    // If one tree is empty and the other is not, they are not equal
+    return 0;
+}
+
+tree* create_BT(tree *root)
+{
+    tree *curr, *temp, *prev;
+    int i, n, j;
+    printf("Enter no. of nodes:");
+    scanf("%d", &n);
+    char dir[20];
+    for (j = 0; j < n; j++)
+    {
+        temp = (tree *)malloc(sizeof(tree));
+        printf("Enter data:");
+        scanf("%d", &temp->data);
+        temp->lchild = NULL;
+        temp->rchild = NULL;
+        if (root == NULL)
+            root = temp;
+        else
+        {
+            printf("enter the direction:");
+            scanf("%s", dir);
+            curr = root;
+            i = 0;
+            while (dir[i] != '\0')
+            {
+                prev = curr;
+                if (dir[i] == 'l' || dir[i] == 'L')
+                    curr = curr->lchild;
+                else
+                    curr = curr->rchild;
+                i++;
+            }
+            if (curr != NULL || dir[i] != '\0')
+                printf("Invalid direction entered");
+            else
+            {
+                if (dir[i - 1] == 'l')
+                    prev->lchild = temp;
+                else
+                    prev->rchild = temp;
+            }
+        }
+    }
+    return root;
+}
+
+
+
+int main() {
+
+    tree* tree1 = NULL;
+    tree1=create_BT(tree1);
+
+
+    tree* tree2 = NULL;
+    tree2=create_BT(tree2);
+
+    if (areEqual(tree1, tree2)) {
+        printf("The trees are equal.\n");
+    } else {
+        printf("The trees are not equal.\n");
+    }
+
+    return 0;
+}
+
