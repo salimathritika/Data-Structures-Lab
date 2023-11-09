@@ -1,4 +1,4 @@
-//FIRST 2 NOT WORKING
+//WORKING
 #include<stdio.h>
 #include<stdlib.h>
 
