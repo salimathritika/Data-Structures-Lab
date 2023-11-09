@@ -1,0 +1,131 @@
+//8 addi 1 //complete
+#include <stdio.h>
+#include <stdlib.h>
+
+
+typedef struct node
+{
+    int data;
+    struct node*llink;
+    struct node*rlink;
+}node;
+node *x1=NULL;
+node *x2=NULL;
+node *u=NULL;
+node *in=NULL;
+
+node *insert_rear(node *first,int n)
+{
+     node *curr;
+    node *temp=(node*)malloc(sizeof(node));
+    temp->data=n;
+    temp->rlink=NULL;
+    temp->llink=NULL;
+    if(first==NULL)
+    {
+        first=temp;
+    }
+    else
+    {
+        for(curr=first;curr->rlink!=NULL;curr=curr->rlink);
+        curr->rlink=temp;
+        temp->llink=curr;
+
+    }
+    return first;
+}
+
+void display(node *first)
+{
+    node *curr;
+    if(first==NULL)
+    {
+        printf("List is empty\n");
+    }
+    else
+    {
+        for(curr=first;curr->rlink!=NULL;curr=curr->rlink)
+           printf("%d->",curr->data);
+        printf("%d",curr->data);
+    }
+
+}
+int isPresent(node *first,int key)
+{
+    node *curr;
+    for(curr=first;curr!=NULL;curr=curr->rlink)
+    {
+        if(curr->data==key)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+void union_dll()
+{
+    node *curr1=x1,*curr2=x2;
+    while(curr1!=NULL)
+    {
+        u=insert_rear(u,curr1->data);
+        curr1=curr1->rlink;
+    }
+    while(curr2!=NULL)
+    {
+        if(!isPresent(u,curr2->data))
+        {
+            u=insert_rear(u,curr2->data);
+        }
+        curr2=curr2->rlink;
+    }
+}
+
+void intersection_dll(node *x1,node *x2)
+{
+    node *curr1=x1,*curr2=x2;
+    while(curr1!=NULL)
+    {
+        if(isPresent(x2,curr1->data))
+        {
+            in=insert_rear(in,curr1->data);
+        }
+        curr1=curr1->rlink;
+    }
+
+}
+
+
+int main()
+{
+    int op,n,a;
+    printf("Enter number of elements of first list:\n");
+    scanf("%d",&n);
+    printf("Enter elements to be insert\n");
+    for(int i=0;i<n;i++)
+    {
+        scanf("%d",&a);
+        x1=insert_rear(x1,a);
+    }
+
+    printf("Enter number of elements of second list:\n");
+    scanf("%d",&n);
+    printf("Enter elements to be insert\n");
+    for(int i=0;i<n;i++)
+    {
+        scanf("%d",&a);
+        x2=insert_rear(x2,a);
+    }
+
+    printf("\nFirst list is:");
+    display(x1);
+    printf("\nSecond list is:");
+    display(x2);
+    printf("\nUnion of the two lists:");
+    union_dll();
+    display(u);
+    printf("\nIntersection of the two lists:");
+    intersection_dll(x1,x2);
+    display(in);
+
+
+}
