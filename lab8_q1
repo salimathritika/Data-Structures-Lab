@@ -1,4 +1,4 @@
-//ONLY REVERSE FUNCTION HAS TO BE WRITTEN
+//WORKS
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -216,6 +216,26 @@ void traverse()  //WORKS
     printf("\nAfter traversing the number of nodes present is %d\n",i);
 }
 
+void rev()
+{
+    node* temp = NULL;
+    node* curr;
+    curr=first;
+
+    while (curr != NULL) {
+        temp = curr->llink;
+        curr->llink = curr->rlink;
+        curr->rlink = temp;
+        curr = curr->llink;
+    }
+
+    if (temp != NULL) {
+        first = temp->llink;
+    }
+    printf("\nReversed the link\n");
+
+}
+
 
 int main()
 {
@@ -225,7 +245,7 @@ int main()
     create_dll(n);
     display();
 
-    printf("\n1.To delete an element\n2.To display the list\n3.To display the list in reverse\n4.To insert element at the rear of the list\n5.To delete from rear of list\n6.To insert element after a key\n7.To insert element before a key\n8.To insert at specific position\n9.To traverse the list\n-1.To exit\n");
+    printf("\n1.To delete an element\n2.To display the list\n3.To display the list in reverse\n4.To insert element at the rear of the list\n5.To delete from rear of list\n6.To insert element after a key\n7.To insert element before a key\n8.To insert at specific position\n9.To traverse the list\n10.To reverse the list\n-1.To exit\n");
     do
     {
         printf("\nEnter choice:");
@@ -295,6 +315,11 @@ int main()
                     traverse();
                     break;
                 }
+            case 10:
+               {
+                 rev();
+                 break;
+               }
         case -1:
             {
                 printf("\nExiting\n");
