@@ -1,0 +1,74 @@
+//not working
+
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct
+{
+    int data;
+    struct bst *lchild;
+    struct bst *rchild;
+}bst;
+
+bst *root=NULL;
+
+void create(int n)
+{
+    int key,flag=0;
+    bst *curr=root;
+    while(n>0)
+    {
+        printf("Enter element:");
+        scanf("%d",&key);
+        bst *temp=(bst*)malloc(sizeof(bst));
+        temp->data=key;
+        temp->rchild=NULL;
+        temp->lchild=NULL;
+        curr=root;
+        while(curr!=NULL)
+        {
+            if(curr->data>key)
+                curr=curr->lchild;
+            else if(curr->data<key)
+                curr=curr->rchild;
+            else
+            {
+                printf("This element already exists");
+                flag=1;
+                break;
+            }
+        }
+        if(flag==0)
+            curr=temp;
+        n--;
+    }
+}
+
+void level_order()
+{
+    bst *curr=root;
+    bst *q[20];
+    int front=-1,rear=-1;
+    q[++rear]=root;
+    while(front!=rear)
+    {
+        curr=q[++front];
+        printf("%d ",curr->data);
+        if(curr->lchild!=NULL)
+            q[++rear]=curr->lchild;
+        if(curr->rchild !=NULL)
+            q[++rear]=curr->rchild;
+    }
+}
+
+int main()
+{
+    int n;
+    printf("Enter the total number of nodes:");
+    scanf("%d",&n);
+    create(n);
+    printf("\nTree is created");
+
+    printf("\nLevel order traversal of tree:");
+    level_order();
+}
