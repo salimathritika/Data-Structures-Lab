@@ -1,5 +1,3 @@
-//WORKS
-
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -9,9 +7,6 @@ typedef struct
     struct node *left;
     struct node *right;
 }node;
-
-
-
 
 void insert(node *first,node *head,int n)
 {
@@ -43,6 +38,52 @@ void display(node *first,node *head)
     }
 }
 
+node* deleteNode(node* head, int key) {
+    if (head == NULL) {
+        printf("List is empty. Cannot delete.\n");
+        return NULL;
+    }
+
+    node* current = head;
+    node* toDelete = NULL;
+
+    // Find the node with the specified data value
+    do {
+        if (current->data == key) {
+            toDelete = current;
+            break;
+        }
+        current = current->right;
+    } while (current != head);
+
+    if (toDelete == NULL) {
+        printf("Node with data %d not found in the list.\n", key);
+        return head;
+    }
+
+    // Adjust pointers to remove the node
+    if (toDelete->right == toDelete) {
+        // Only one node in the list
+        free(toDelete);
+        return NULL;
+    }
+
+    if (toDelete == head) {
+        // Update head if the node to be deleted is the head
+        head = toDelete->right;
+    }
+
+    node *temp;
+    temp=toDelete->left;
+    temp->right = toDelete->right;
+    temp=toDelete->right;
+    temp->left = toDelete->left;
+
+    free(toDelete);
+
+    return head;
+}
+
 int main()
 {
     node *head=(node*)malloc(sizeof(node));
@@ -52,7 +93,7 @@ int main()
     node *first=head;
     first->right=head;
     int opt,n,ele;
-    printf("1.To insert element\n2.To display\n-1.To exit");
+    printf("1.To insert element\n2.To display\n3.To delete element\n-1.To exit");
     do
     {
         printf("\nEnter choice:");
@@ -70,6 +111,14 @@ int main()
             {
                 display(first,head);
                 break;
+            }
+        case 3:
+            {
+                printf("\nEnter element to be deleted:");
+                scanf("%d",&ele);
+                first=deleteNode(first,ele);
+                break;
+
             }
         case -1:
             {
