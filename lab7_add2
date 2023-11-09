@@ -1,32 +1,33 @@
-//WORKS
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Node {
+typedef struct  {
     int data;
     struct Node* next;
-};
+}Node;
 
-struct Node* createNode(int data) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+Node* createNode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
 
     newNode->data = data;
     newNode->next = NULL;
     return newNode;
 }
 
-struct Node* insertSorted(struct Node* head, int data) {
-    struct Node* newNode = createNode(data);
+Node* insertSorted(Node* head, int data) {
+    Node* newNode = createNode(data);
 
     if (head == NULL || data <= head->data) {
         newNode->next = head;
         return newNode;
     }
 
-    struct Node* current = head;
+    Node* current = head;
 
-    while (current->next != NULL && current->next->data < data) {
+    Node *temp=current->next;
+    while (temp != NULL && temp->data < data) {
         current = current->next;
+        temp=current->next;
     }
 
     newNode->next = current->next;
@@ -35,8 +36,8 @@ struct Node* insertSorted(struct Node* head, int data) {
     return head;
 }
 
-struct Node* createSortedLinkedList() {
-    struct Node* head = NULL;
+Node* createSortedLinkedList() {
+    Node* head = NULL;
     int n, data;
 
     printf("Enter the number of nodes in the sorted list: ");
@@ -51,9 +52,9 @@ struct Node* createSortedLinkedList() {
     return head;
 }
 
-struct Node* mergeSortedLists(struct Node* X, struct Node* Y) {
-    struct Node dummy;
-    struct Node* tail = &dummy;
+Node* mergeSortedLists(Node* X, Node* Y) {
+    Node dummy;
+    Node* tail = &dummy;
     dummy.next = NULL;
 
     while (X != NULL && Y != NULL) {
@@ -76,8 +77,8 @@ struct Node* mergeSortedLists(struct Node* X, struct Node* Y) {
     return dummy.next;
 }
 
-void printLinkedList(struct Node* head) {
-    struct Node* current = head;
+void display(Node* head) {
+    Node* current = head;
     while (current != NULL) {
         printf("%d -> ", current->data);
         current = current->next;
@@ -86,19 +87,19 @@ void printLinkedList(struct Node* head) {
 }
 
 int main() {
-    struct Node* X = createSortedLinkedList();
-    struct Node* Y = createSortedLinkedList();
+    Node* X = createSortedLinkedList();
+    Node* Y = createSortedLinkedList();
 
     printf("List X: ");
-    printLinkedList(X);
+    display(X);
 
     printf("List Y: ");
-    printLinkedList(Y);
+    display(Y);
 
-    struct Node* Z = mergeSortedLists(X, Y);
+    Node* Z = mergeSortedLists(X, Y);
 
     printf("Merged List Z: ");
-    printLinkedList(Z);
+    display(Z);
 
     return 0;
 }
