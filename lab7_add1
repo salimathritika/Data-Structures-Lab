@@ -1,64 +1,52 @@
-//NEED TO EDIT
-
+//WORKS
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define a structure for a linked list node
-struct Node {
+typedef struct Node {
     int data;
     struct Node* next;
-};
+} Node;
 
-// Function to create a new node and add it to the end of the linked list
-struct Node* createNode(int data) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    if (newNode == NULL) {
-        printf("Memory allocation failed!\n");
-        exit(1);
-    }
+Node* createNode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = data;
     newNode->next = NULL;
     return newNode;
 }
 
-// Function to insert a new node at the end of the linked list recursively
-void insertAtEnd(struct Node* current, int data) {
-    if (current->next == NULL) {
-        // Create a new node and add it to the end
-        current->next = createNode(data);
+Node* insertAtEnd(Node* head, int data) {
+    if (head == NULL) {
+        return createNode(data);
     } else {
-        // Recursively call the function on the next node
-        insertAtEnd(current->next, data);
+        head->next = insertAtEnd(head->next, data);
+        return head;
     }
 }
 
-// Function to traverse and print the elements of the linked list recursively
-void traverseLinkedList(struct Node* current) {
+void traverseLinkedList(Node* current) {
     if (current == NULL) {
-        return; // Base case: If the current node is NULL, the list is empty, so we're done.
+        return;
     }
     printf("%d -> ", current->data);
-    traverseLinkedList(current->next); // Recursively call the function on the next node
+    traverseLinkedList(current->next);
 }
 
 int main() {
-    struct Node* head = NULL;
+    Node* head = NULL;
 
-    int n,ele;
-    // Insert elements into the linked list
-    printf("Enter the number of nodes in the list:");
-    scanf("%d",&n);
-    for(int i=0;i<n;i++)
-    {
-        printf("Enter the element to be inserted:");
-        insertAtEnd(head,ele);
+    int n, ele;
+    printf("Enter the number of nodes in the list: ");
+    scanf("%d", &n);
+
+    printf("Enter the elements to be inserted: ");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &ele);
+        head = insertAtEnd(head, ele);
     }
-
 
     printf("Linked List: ");
     traverseLinkedList(head);
     printf("NULL\n");
 
-    // Don't forget to free the memory allocated for the linked list nodes in a real program
     return 0;
 }
