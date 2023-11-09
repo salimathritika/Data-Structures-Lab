@@ -1,0 +1,91 @@
+//WORKING
+
+#include <stdio.h>
+#include <stdlib.h>
+
+
+typedef struct {
+    int data;
+    struct tree* lchild;
+    struct tree* rchild;
+}tree;
+
+tree* create_BT(tree *root)
+{
+    tree *curr, *temp, *prev;
+    int i, n, j;
+    printf("Enter no. of nodes:");
+    scanf("%d", &n);
+    char dir[20];
+    for (j = 0; j < n; j++)
+    {
+        temp = (tree *)malloc(sizeof(tree));
+        printf("Enter data:");
+        scanf("%d", &temp->data);
+        temp->lchild = NULL;
+        temp->rchild = NULL;
+        if (root == NULL)
+            root = temp;
+        else
+        {
+            printf("enter the direction:");
+            scanf("%s", dir);
+            curr = root;
+            i = 0;
+            while (dir[i] != '\0')
+            {
+                prev = curr;
+                if (dir[i] == 'l' || dir[i] == 'L')
+                    curr = curr->lchild;
+                else
+                    curr = curr->rchild;
+                i++;
+            }
+            if (curr != NULL || dir[i] != '\0')
+                printf("Invalid direction entered");
+            else
+            {
+                if (dir[i - 1] == 'l')
+                    prev->lchild = temp;
+                else
+                    prev->rchild = temp;
+            }
+        }
+    }
+    return root;
+}
+
+tree* copy(tree* root)
+{
+    tree *temp=(tree*)malloc(sizeof(tree));
+    if(root)
+    {
+        temp->lchild=copy(root->lchild);
+        temp->rchild=copy(root->rchild);
+        temp->data=root->data;
+        return temp;
+    }
+    return NULL;
+}
+
+void inorder(tree *root)
+{
+    if (root != NULL)
+    {
+        inorder(root->lchild);
+        printf("%d ", root->data);
+        inorder(root->rchild);
+    }
+}
+
+int main() {
+    tree* tree1 = NULL;
+    tree1=create_BT(tree1);
+    printf("\nInorder of original tree:");
+    inorder(tree1);
+    tree* c=NULL;
+    c=copy(tree1);
+    printf("\nCopied");
+    printf("\nInorder of duplicate tree:");
+    inorder(c);
+}
