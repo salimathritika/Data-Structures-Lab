@@ -3,28 +3,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Node structure for a binary tree
 typedef struct {
     int data;
     struct tree* lchild;
     struct tree* rchild;
 }tree;
 
-
-// Function to check the equality of two binary trees
 int areEqual(tree* root1, tree* root2) {
     if (root1 == NULL && root2 == NULL) {
-        return 1; // Both trees are empty, consider them equal
+        return 1; 
     }
 
     if (root1 != NULL && root2 != NULL) {
-        // Check if the current nodes are equal, and recursively check left and right subtrees
         return (root1->data == root2->data) &&
                areEqual(root1->lchild, root2->lchild) &&
                areEqual(root1->rchild, root2->rchild);
     }
-
-    // If one tree is empty and the other is not, they are not equal
     return 0;
 }
 
