@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Node structure for a binary tree
 typedef struct {
     int data;
     struct tree* lchild;
