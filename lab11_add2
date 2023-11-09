@@ -1,0 +1,109 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct {
+    int key;
+    struct bst* left;
+    struct bst* right;
+}bst;
+
+bst* createNode(int key) {
+    bst* newNode = (bst*)malloc(sizeof(bst));
+    newNode->key = key;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+bst* insert(bst* root, int key) {
+    if (root == NULL) {
+        return createNode(key);
+    }
+
+    if (key < root->key) {
+        root->left = insert(root->left, key);
+    } else if (key > root->key) {
+        root->right = insert(root->right, key);
+    }
+
+    return root;
+}
+
+void inOrderTraversal(bst* root) {
+    if (root != NULL) {
+        inOrderTraversal(root->left);
+        printf("%d ", root->key);
+        inOrderTraversal(root->right);
+    }
+}
+
+bst* findMin(bst* root) {
+    while (root->left != NULL) {
+        root = root->left;
+    }
+    return root;
+}
+
+
+bst* deleteNode(bst* root, int key) {
+    if (root == NULL) {
+        return root;
+    }
+
+    if (key < root->key) {
+        root->left = deleteNode(root->left, key);
+    } else if (key > root->key) {
+        root->right = deleteNode(root->right, key);
+    } else {
+
+        if (root->left == NULL) {
+            bst* temp = root->right;
+            free(root);
+            return temp;
+        } else if (root->right == NULL) {
+            bst* temp = root->left;
+            free(root);
+            return temp;
+        }
+
+
+        bst* temp = findMin(root->right);
+
+        root->key = temp->key;
+        root->right = deleteNode(root->right, temp->key);
+    }
+
+    return root;
+}
+
+
+int main() {
+    struct Node* root = NULL;
+
+    int n, ele;
+
+    printf("Enter the number of elements in the BST: ");
+    scanf("%d", &n);
+
+    printf("Enter the elements of the BST:\n");
+    for (int i = 0; i < n; ++i) {
+        int key;
+        scanf("%d", &key);
+        root = insert(root, key);
+    }
+
+    printf("Enter the key to delete from the BST: ");
+    scanf("%d", &ele);
+
+    printf("In-order traversal before deletion: ");
+    inOrderTraversal(root);
+    printf("\n");
+
+    root = deleteNode(root, ele);
+
+    printf("In-order traversal after deleting %d: ", ele);
+    inOrderTraversal(root);
+    printf("\n");
+
+    return 0;
+}
+
