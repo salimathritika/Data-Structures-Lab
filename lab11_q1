@@ -5,8 +5,8 @@
 typedef struct
 {
     int data;
-    struct tree *lchild;
-    struct tree *rchild;
+    struct bst *lchild;
+    struct bst *rchild;
 }bst;
 
 bst *root=NULL;
@@ -17,7 +17,7 @@ void create(int n)
     bst *curr=root;
     while(n>0)
     {
-        printf("Enter key:");
+        printf("Enter element:");
         scanf("%d",&key);
         bst *temp=(bst*)malloc(sizeof(bst));
         temp->data=key;
@@ -32,7 +32,7 @@ void create(int n)
                 curr=curr->rchild;
             else
             {
-                printf("This key already exists");
+                printf("This element already exists");
                 flag=1;
                 break;
             }
@@ -43,6 +43,16 @@ void create(int n)
     }
 }
 
+void inorder(bst *r)
+{
+    if (r != NULL)
+    {
+        inorder(r->lchild);
+        printf("%d ", r->data);
+        inorder(r->rchild);
+    }
+}
+
 int main()
 {
     int n;
@@ -50,4 +60,8 @@ int main()
     scanf("%d",&n);
     create(n);
     printf("\nTree is created");
+
+    printf("\nInorder traversal of tree:");
+    inorder(root);
+
 }
