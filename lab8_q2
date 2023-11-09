@@ -1,66 +1,23 @@
-//STILL WORKING ON IT
-
-#include<stdio.h>
-#include<stdlib.h>
-
-typedef struct
-{
-    struct node*llink;
-    int data;
-    struct node*rlink;
-}node;
-
-node*insert(int ele,node *a)
-{
-    node *first=a;
-    node *curr,*temp;
-    temp=(node*)malloc(sizeof(node));
-    temp->data=ele;
-    for(curr=first;curr->rlink!=NULL;curr=curr->rlink);
-    curr-rlink=temp;
-    temp->llink=curr;
-    temp->rlink=NULL;
-    
-}
-
-int main()
-{
-    node *x1=NULL,*x2=NULL;
-    int n,i,ele;
-    printf("Enter the number of nodes in x1:");
-    scanf("%d",&n);
-    printf("Enter elements to be inserted:\n");
-    for(i=0;i<n;i++)
-    {
-        scanf("%d",&ele);
-        x1=insert()
-    }
-}
---------------------------------------------------------------------------------------------
 #include <stdio.h>
 #include <stdlib.h>
 
-// Node structure for a doubly linked list
 struct Node {
     int data;
     struct Node* next;
     struct Node* prev;
 };
 
-// Function to insert a node at the end of a doubly linked list
-void insertNodeAtEnd(struct Node* head, int newData) {
+struct Node* insert(struct Node* head, int newData) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->data = newData;
     newNode->next = NULL;
 
     if (head == NULL) {
         newNode->prev = NULL;
-        head = newNode;
-        return;
+        return newNode;
     }
 
-    struct Node* current;
-    current=head;
+    struct Node* current = head;
 
     while (current->next != NULL) {
         current = current->next;
@@ -68,30 +25,31 @@ void insertNodeAtEnd(struct Node* head, int newData) {
 
     current->next = newNode;
     newNode->prev = current;
+
+    return head;
 }
 
-// Function to concatenate two doubly linked lists
-void concatenateDoublyLinkedLists(struct Node* X1, struct Node* X2) {
+struct Node* concatenate(struct Node* X1, struct Node* X2) {
     if (X1 == NULL) {
-        X1 = X2;
-        return;
+        return X2;
     }
 
-    struct Node* current;
-    current=X1;
+    struct Node* current = X1;
 
-    // Traverse to the end of the first list
     while (current->next != NULL) {
         current = current->next;
     }
 
-    // Connect the last node of the first list to the first node of the second list
     current->next = X2;
-    X2->prev = current;
+
+    if (X2 != NULL) {
+        X2->prev = current;
+    }
+
+    return X1;
 }
 
-// Function to print a doubly linked list
-void printDoublyLinkedList(struct Node* node) {
+void display(struct Node* node) {
     while (node != NULL) {
         printf("%d ", node->data);
         node = node->next;
@@ -99,40 +57,42 @@ void printDoublyLinkedList(struct Node* node) {
     printf("\n");
 }
 
-// Example usage
+struct Node* createDLL() {
+    struct Node* head = NULL;
+    int n, data;
+
+    printf("Enter the number of nodes: ");
+    scanf("%d", &n);
+
+    printf("\nEnter the elements:\n");
+    for (int i = 0; i < n; ++i) {
+        scanf("%d", &data);
+        head = insert(head, data);
+    }
+
+    return head;
+}
+
 int main() {
     struct Node* X1 = NULL;
     struct Node* X2 = NULL;
 
-    int n,a;
-    printf("Enter the number of nodes in the first list:");
-    scanf("%d",&n);
-    printf("Enter the elements:\n");
-    for(int i=0;i<n;i++)
-    {
-        scanf("%d",&a);
-        insertNodeAtEnd(X1, a);
-    }
-    printf("Enter the number of nodes in the second list:");
-    scanf("%d",&n);
-    printf("Enter the elements:\n");
-    for(int i=0;i<n;i++)
-    {
-        scanf("%d",&a);
-        insertNodeAtEnd(X2, a);
-    }
+    printf("Creating Doubly Linked List X1:\n");
+    X1 = createDLL();
+
+    printf("Creating Doubly Linked List X2:\n");
+    X2 = createDLL();
 
     printf("Original Doubly Linked List X1: ");
-    printDoublyLinkedList(X1);
+    display(X1);
 
     printf("Original Doubly Linked List X2: ");
-    printDoublyLinkedList(X2);
+    display(X2);
 
-    // Concatenate X2 to X1
-    concatenateDoublyLinkedLists(X1, X2);
+    X1 = concatenate(X1, X2);
 
     printf("Concatenated Doubly Linked List: ");
-    printDoublyLinkedList(X1);
+    display(X1);
 
     return 0;
 }
