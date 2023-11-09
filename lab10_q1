@@ -1,6 +1,6 @@
-//WORKS
-#include<stdio.h>
-#include<stdlib.h>
+//SHOWING ONLY IMMEDIATE ANCESTOR
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef struct tree
 {
@@ -51,6 +51,24 @@ void count_leaf(tree *root, int *cl, int *tot)
         count_leaf(root->lchild, cl, tot);
         count_leaf(root->rchild, cl, tot);
     }
+}
+
+void printAncestors(tree *root, int target)
+{
+    if (root == NULL)
+        return;
+
+    if (root->data == target)
+        return;
+
+    if ((root->lchild != NULL && root->lchild->data == target) || (root->rchild != NULL && root->rchild->data == target))
+    {
+        printf("%d ", root->data);
+        return;
+    }
+
+    printAncestors(root->lchild, target);
+    printAncestors(root->rchild, target);
 }
 
 void create_BT()
@@ -118,7 +136,7 @@ int main()
     int opt;
     do
     {
-        printf("\n1.To create binary tree\n2.To find depth of tree\n3.To print inorder traversal\n4.To print postorder traversal\n5.To print preoder traversal\n6.To count number of leaf nodes\n-1.To exit\n");
+        printf("\n1.To create binary tree\n2.To find depth of tree\n3.To print inorder traversal\n4.To print postorder traversal\n5.To print preoder traversal\n6.To count number of leaf nodes\n7.To print ancestors of a given element\n-1.To exit\n");
         scanf("%d", &opt);
         switch (opt)
         {
@@ -154,6 +172,16 @@ int main()
             count_leaf(root, &cl, &tot);
             printf("Leaf nodes: %d\n", cl);
             printf("Non-leaf nodes: %d\n", (tot - cl));
+            break;
+        }
+        case 7:
+        {
+            int target;
+            printf("Enter the target element: ");
+            scanf("%d", &target);
+            printf("Ancestors of %d: ", target);
+            printAncestors(root, target);
+            printf("\n");
             break;
         }
         case -1:
