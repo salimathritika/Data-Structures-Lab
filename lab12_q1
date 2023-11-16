@@ -1,96 +1,63 @@
-//... A Program to represent a Graph by using an Adjacency Matrix method
-
-//NEED TO EDIT
-
 #include <stdio.h>
-#include <stdlib.h>
-void main()
-{
-   int option;
-   do
-   {
-        printf("\n A Program to represent a Graph by using an ");
-	printf("Adjacency Matrix method \n ");
-	printf("\n 1. Directed Graph ");
-	printf("\n 2. Un-Directed Graph ");
-	printf("\n 3. Exit ");
-	printf("\n\n Select a proper option : ");
-	scanf("%d", &option);
-	switch(option)
-	{
-            case 1 : dir_graph();
-                     break;
-            case 2 : undir_graph();
-                     break;
-            case 3 : exit(0);
-	} // switch
-    }while(1);
+
+#define MAX_VERTICES 10
+
+void initializeMatrix(int matrix[MAX_VERTICES][MAX_VERTICES]) {
+    for (int i = 0; i < MAX_VERTICES; i++) {
+        for (int j = 0; j < MAX_VERTICES; j++) {
+            matrix[i][j] = 0;
+        }
+    }
 }
 
-int dir_graph()
-{
-    int adj_mat[50][50];
-    int n;
-    int in_deg, out_deg, i, j;
-    printf("\n How Many Vertices ? : ");
-    scanf("%d", &n);
-    read_graph(adj_mat, n);
-    printf("\n Vertex \t In_Degree \t Out_Degree \t Total_Degree ");
-    for (i = 1; i <= n ; i++ )
-    {
-        in_deg = out_deg = 0;
-	for ( j = 1 ; j <= n ; j++ )
-	{
-            if ( adj_mat[j][i] == 1 )
-                in_deg++;
-	}
-        for ( j = 1 ; j <= n ; j++ )
-            if (adj_mat[i][j] == 1 )
-                out_deg++;
-            printf("\n\n %5d\t\t\t%d\t\t%d\t\t%d\n\n",i,in_deg,out_deg,in_deg+out_deg);
+void addEdge(int matrix[MAX_VERTICES][MAX_VERTICES], int source, int destination, int isDirected) {
+    matrix[source][destination] = 1;
+    if (!isDirected) {
+        matrix[destination][source] = 1;
     }
-    return;
 }
 
-int undir_graph()
-{
-    int adj_mat[50][50];
-    int deg, i, j, n;
-    printf("\n How Many Vertices ? : ");
-    scanf("%d", &n);
-    read_graph(adj_mat, n);
-    printf("\n Vertex \t Degree ");
-    for ( i = 1 ; i <= n ; i++ )
-    {
-        deg = 0;
-        for ( j = 1 ; j <= n ; j++ )
-            if ( adj_mat[i][j] == 1)
-                deg++;
-        printf("\n\n %5d \t\t %d\n\n", i, deg);
+void displayMatrix(int matrix[MAX_VERTICES][MAX_VERTICES], int vertices) {
+    printf("Adjacency Matrix:\n");
+    for (int i = 0; i < vertices; i++) {
+        for (int j = 0; j < vertices; j++) {
+            printf("%d ", matrix[i][j]);
+        }
+        printf("\n");
     }
-    return;
 }
 
-int read_graph ( int adj_mat[50][50], int n )
-{
-    int i, j;
-    char reply;
-    for ( i = 1 ; i <= n ; i++ )
-    {
-        for ( j = 1 ; j <= n ; j++ )
-        {
-            if ( i == j )
-            {
-                adj_mat[i][j] = 0;
-		continue;
-            }
-            printf("\n Vertices %d & %d are Adjacent ? (Y/N) :",i,j);
-            scanf("%c", &reply);
-            if ( reply == 'y' || reply == 'Y' )
-                adj_mat[i][j] = 1;
-            else
-                adj_mat[i][j] = 0;
-	}
+int main() {
+    int graphMatrix[MAX_VERTICES][MAX_VERTICES];
+    int vertices, edges, source, destination, isDirected;
+
+    printf("Enter the number of vertices (max %d): ", MAX_VERTICES);
+    scanf("%d", &vertices);
+
+    if (vertices > MAX_VERTICES) {
+        printf("Number of vertices exceeds the limit. Exiting.\n");
+        return 1;
     }
-    return;
+
+    initializeMatrix(graphMatrix);
+
+    printf("Enter the number of edges: ");
+    scanf("%d", &edges);
+
+    for (int i = 0; i < edges; i++) {
+        printf("Enter edge %d (source destination isDirected): ", i + 1);
+        scanf("%d %d %d", &source, &destination, &isDirected);
+
+        if (source < 0 || source >= vertices || destination < 0 || destination >= vertices) {
+            printf("Invalid source or destination. Please enter valid vertices.\n");
+            i--;
+            continue;
+        }
+
+        addEdge(graphMatrix, source, destination, isDirected);
+    }
+
+    displayMatrix(graphMatrix, vertices);
+
+    return 0;
 }
