@@ -1,51 +1,92 @@
-//works
-
 #include <stdio.h>
+#include <stdlib.h>
 
-void dfs(int a[20][20], int n, int source) {
-    int visited[10], u, v, i;
-    int S[20], top = -1;
+struct queue
+{
+    int size;
+    int f;
+    int r;
+    int* arr;
+};
 
-    for (i = 1; i <= n; i++)
-        visited[i] = 0;
+int isEmpty(struct queue *q) {
+    return q->r == q->f;
+}
 
-    S[++top] = source;
-    visited[source] = 1;
+int isFull(struct queue *q) {
+    return q->r == q->size - 1;
+}
 
-    printf("Depth-First Search starting from vertex %d: ", source);
-
-    while (top >= 0) {
-        u = S[top--];
-
-        for (v = 1; v <= n; v++) {
-            if (a[u][v] == 1 && visited[v] == 0) {
-                visited[v] = 1;
-                S[++top] = v;
-            }
-        }
-
-        printf("%d ", u);
+void enqueue(struct queue *q, int val) {
+    if (isFull(q)) {
+        printf("This Queue is full\n");
+    }
+    else {
+        q->r++;
+        q->arr[q->r] = val;
+        // printf("Enqueued element: %d\n", val);
     }
 }
 
+int dequeue(struct queue *q) {
+    int a = -1;
+    if (isEmpty(q)) {
+        printf("This Queue is empty\n");
+    }
+    else {
+        q->f++;
+        a = q->arr[q->f];
+    }
+    return a;
+}
+
 int main() {
-    int n, a[20][20], source;
+    struct queue q;
+    q.size = 400;
+    q.f = q.r = 0;
+    q.arr = (int*)malloc(q.size * sizeof(int));
 
+    // BFS Implementation
+    int numVertices;
     printf("Enter the number of vertices: ");
-    scanf("%d", &n);
+    scanf("%d", &numVertices);
 
-    printf("Enter the adjacency matrix:\n");
-    int i,j;
-    for (i = 1; i <= n; i++) {
-        for (j = 1; j <= n; j++) {
-            scanf("%d", &a[i][j]);
+    int i, j;
+    int visited[numVertices];
+    int adjacencyMatrix[numVertices][numVertices];
+
+    // Input the adjacency matrix
+    printf("Enter the adjacency matrix (0 or 1) for the graph:\n");
+    for (i = 0; i < numVertices; i++) {
+        for (j = 0; j < numVertices; j++) {
+            scanf("%d", &adjacencyMatrix[i][j]);
         }
     }
 
-    printf("Enter the source vertex: ");
-    scanf("%d", &source);
+    // Initialize visited array
+    for (i = 0; i < numVertices; i++) {
+        visited[i] = 0;
+    }
 
-    dfs(a, n, source);
+    // Input the starting node
+    int startNode;
+    printf("Enter the starting node: ");
+    scanf("%d", &startNode);
+
+    printf("%d ", startNode);
+    enqueue(&q, startNode);
+    visited[startNode] = 1;
+
+    while (!isEmpty(&q)) {
+        int node = dequeue(&q);
+        for (j = 0; j < numVertices; j++) {
+            if (adjacencyMatrix[node][j] == 1 && visited[j] == 0) {
+                printf("%d ", j);
+                visited[j] = 1;
+                enqueue(&q, j);
+            }
+        }
+    }
 
     return 0;
 }
